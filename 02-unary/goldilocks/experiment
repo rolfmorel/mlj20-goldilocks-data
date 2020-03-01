@@ -17,8 +17,12 @@ except ImportError:
 from multiprocessing import Pool
 from glob import glob
 from itertools import product
+from functools import reduce
 from collections import defaultdict
 from statistics import mean, stdev
+
+NR_BOTTOMS = 0
+
 
 POOL_SIZE = 3
 #POOL_SIZE = 1
@@ -28,13 +32,13 @@ TIMEOUT = 120
 POS_EXAMPLES = 2
 NEG_EXAMPLES = 0 # NB: ignored for now
 CLAUSES = 1
-TRIALS = 1
+TRIALS = 2
 
-MIN_SIZE = 11
-MAX_SIZE = 11
+MIN_SIZE = 1
+MAX_SIZE = 10
 
 goldilocks = None
-sys.path.append("../../../systems/goldilocks/")
+sys.path.append("../../systems/goldilocks/")
 import chimera.main as goldilocks
 from chimera.util import working_directory
 
@@ -42,6 +46,7 @@ def main(args):
     trial, size = args
     task_name = f"size_{size}-trial_{trial}"
     with working_directory("./" + task_name), \
+         open("bk.asp.pl", "w") as asp_bk, \
          open("parameters.pl", "w") as params, \
          open("examples.pl", "w") as examples, \
          open("result.txt", "w") as results:
@@ -50,49 +55,58 @@ def main(args):
 max_vars({max_vars+1}).
 max_body({MAX_SIZE}).
 max_clauses({CLAUSES}).
+nr_bottoms_({NR_BOTTOMS}).
 """
 )
         params.flush()
+        primes10 = [2,3,5,7,11,13,17,19,23,29]
+        primes = primes10[:size]
+        bk_preds = '\n'.join(f"modeb(div{p},1).\ndirection(div{p},0,in)." for p in primes)
+        bk_bottoms = '\n'.join(f"modeb(bottom{n},1).\ndirection(bottom{n},0,in)." for n in range(NR_BOTTOMS))
+        asp_bk.write("modeh(f,1).\ndirection(f,0,in).\n\n" + bk_preds + "\n\n" + bk_bottoms)
+        asp_bk.flush()
 
-        examples.write(f"""\
-pos(f(30030)).
-neg(f(15015)).
-neg(f(10010)).
-neg(f(6006)).
-neg(f(4290)).
-neg(f(2730)).
-neg(f(2310)).
-
-%pos(f(510510)).
-%neg(f(255255)).
-%neg(f(170170)).
-%neg(f(102102)).
-%neg(f(72930)).
-%neg(f(46410)).
-%neg(f(39270)).
-%neg(f(30030)).
-
-
-%pos(f(6469693230)).
-%neg(f(3234846615)).
-%neg(f(2156564410)).
-%neg(f(1293938646)).
-%neg(f(924241890)).
-%neg(f(588153930)).
-%neg(f(497668710)).
-%neg(f(380570190)).
-%neg(f(340510170)).
-%neg(f(281291010)).
-%neg(f(223092870)).
-
-%pos(f(2310)).
-%neg(f(210)).
-%neg(f(330)).
-%neg(f(462)).
-%neg(f(770)).
-%neg(f(1155)).
-"""
-)
+        product = reduce(lambda x, y: x*y, primes)
+        exs = f"pos(f({product})).\n" + '\n'.join(f"neg(f({product//p}))." for p in primes) + '\n'
+        examples.write(exs)
+#pos(f(30030)).
+#neg(f(15015)).
+#neg(f(10010)).
+#neg(f(6006)).
+#neg(f(4290)).
+#neg(f(2730)).
+#neg(f(2310)).
+#
+#%pos(f(510510)).
+#%neg(f(255255)).
+#%neg(f(170170)).
+#%neg(f(102102)).
+#%neg(f(72930)).
+#%neg(f(46410)).
+#%neg(f(39270)).
+#%neg(f(30030)).
+#
+#
+#%pos(f(6469693230)).
+#%neg(f(3234846615)).
+#%neg(f(2156564410)).
+#%neg(f(1293938646)).
+#%neg(f(924241890)).
+#%neg(f(588153930)).
+#%neg(f(497668710)).
+#%neg(f(380570190)).
+#%neg(f(340510170)).
+#%neg(f(281291010)).
+#%neg(f(223092870)).
+#
+#%pos(f(2310)).
+#%neg(f(210)).
+#%neg(f(330)).
+#%neg(f(462)).
+#%neg(f(770)).
+#%neg(f(1155)).
+#"""
+#)
         examples.flush()
 
         for file_ in glob("../../*.asp.pl") + glob("../../*.prolog.pl"):
