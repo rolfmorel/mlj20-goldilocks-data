@@ -1,0 +1,7 @@
+{
+  "size": 8,
+  "trial": 1,
+  "time": 120.16610193252563,
+  "time_breakdown": null,
+  "program": false
+}
