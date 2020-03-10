@@ -17,8 +17,11 @@ except ImportError:
 from multiprocessing import Pool
 from glob import glob
 from itertools import product
+from functools import reduce
 from collections import defaultdict
 from statistics import mean, stdev
+
+#NR_BOTTOMS = 10
 
 POOL_SIZE = 3
 #POOL_SIZE = 1
@@ -30,7 +33,7 @@ NEG_EXAMPLES = 0 # NB: ignored for now
 CLAUSES = 1
 TRIALS = 2
 
-MIN_SIZE = 1
+MIN_SIZE = 0
 MAX_SIZE = 10
 
 goldilocks = None
@@ -43,19 +46,30 @@ def main(args):
     flag = "constrainted" if constraintness else "unconstrainted"
     task_name = f"{flag}-size_{size}-trial_{trial}"
     with working_directory("./" + task_name), \
+         open("bk.asp.pl", "w") as asp_bk, \
          open("parameters.pl", "w") as params, \
          open("examples.pl", "w") as examples, \
          open("result.txt", "w") as results:
         max_vars = size
-        params.write(\
-f"max_vars({max_vars+1}).\nmax_body({size}).\nmax_clauses({CLAUSES}).\n" + \
-f"max_pos_x({size}).\nmax_pos_y(0).\n"
+
+        params.write(f"""
+max_vars({max_vars+1}).
+max_body({MAX_SIZE}).
+max_clauses({CLAUSES}).
+nr_bottoms_({size}).
+"""
 )
         params.flush()
 
-        examples.write(\
-f"pos(f(w(0,0,1,1,0),w({size},0,1,1,0))).\n"
-)
+        primes = [2,3,5,7,11,13,17,19,23,29]
+        bk_preds = '\n'.join(f"modeb(div{p},1).\ndirection(div{p},0,in)." for p in primes)
+        bk_bottoms = '\n'.join(f"modeb(bottom{n},1).\ndirection(bottom{n},0,in)." for n in range(1, size + 1))
+        asp_bk.write("modeh(f,1).\ndirection(f,0,in).\n\n" + bk_preds + "\n\n" + bk_bottoms)
+        asp_bk.flush()
+
+        product = reduce(lambda x, y: x*y, primes)
+        exs = f"pos(f({product})).\n" + '\n'.join(f"neg(f({product//p}))." for p in primes) + '\n'
+        examples.write(exs)
         examples.flush()
 
         for file_ in glob("../../*.asp.pl") + glob("../../*.prolog.pl"):
@@ -68,9 +82,10 @@ f"pos(f(w(0,0,1,1,0),w({size},0,1,1,0))).\n"
         timer = threading.Timer(TIMEOUT, lambda: thread.interrupt_main())
         timer.start()
         try:
-            program = goldilocks.main(os.getcwd(), {'constrain_specializations': constraintness})
+            program, time_breakdown = goldilocks.main(os.getcwd(), {'constrain_specializations': constraintness})
         except KeyboardInterrupt:
             program = False  # NB: signifies synthesizer did not return
+            time_breakdown = None
         finally:
             timer.cancel()
 
@@ -80,6 +95,7 @@ f"pos(f(w(0,0,1,1,0),w({size},0,1,1,0))).\n"
                   'size': size,
                   'trial': trial,
                   'time': after - before,
+                  'time_breakdown': time_breakdown,
                   'program': program}
 
         print(json.dumps(result, indent=2), file=results)
@@ -92,10 +108,9 @@ if __name__ == "__main__":
     with working_directory("./" + DATETIME):
         with Pool(POOL_SIZE) as pool:
             constraintness = [True,False]
-            trials = range(1, TRIALS+1)
+            trials = range(1, TRIALS + 1)
             sizes = range(MIN_SIZE, MAX_SIZE + 1)
             process_args = product(constraintness, trials, sizes)
-            #process_args = [(True,1,10)]
             results = pool.map(main, process_args)
             collected_results = defaultdict(lambda: defaultdict(list))
             for res in results:
