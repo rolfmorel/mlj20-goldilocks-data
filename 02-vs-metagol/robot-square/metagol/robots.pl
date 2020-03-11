@@ -17,11 +17,11 @@ body_pred(move_backwards/2).
 
 %% metarules
 metarule(ident, [P,Q], [P,A,B], [[Q,A,B]]).
-metarule(precon, [P,Q,R], [P,A,B], [[Q,A,B],[R,A]]).
-metarule(postcon, [P,Q,R], [P,A,B], [[Q,A,B],[R,B]]).
+%metarule(precon, [P,Q,R], [P,A,B], [[Q,A,B],[R,A]]).
+%metarule(postcon, [P,Q,R], [P,A,B], [[Q,A,B],[R,B]]).
 metarule(chain, [P,Q,R], [P,A,B], [[Q,A,C],[R,C,B]]).
 
-%% functional check
+% functional check
 func_test(Atom1,Atom2,Condition):-
   Atom1 = [P,A,B],
   Atom2 = [P,A,Z],
@@ -45,8 +45,8 @@ d :-
   learn(Pos,[]).
 
 %% background knowledge
-max_right(11).
-max_forwards(1).
+%max_right(11).
+%max_forwards(1).
 
 grab_ball(world(Pos,Pos,false),world(Pos,Pos,true)).
 
