@@ -1,0 +1,6 @@
+{
+  "size": 8,
+  "trial": 2,
+  "time": 120.09927487373352,
+  "program": false
+}
