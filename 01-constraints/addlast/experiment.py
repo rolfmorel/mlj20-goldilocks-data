@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-import sys
 import json
-sys.path.append('/Users/andrew/Dropbox/code/popper')
 import popper.main
 import multiprocessing
 import numpy as np
