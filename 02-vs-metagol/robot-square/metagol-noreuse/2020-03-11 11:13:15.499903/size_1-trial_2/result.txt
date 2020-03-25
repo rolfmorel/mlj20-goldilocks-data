@@ -1,6 +1,0 @@
-{
-  "size": 1,
-  "trial": 2,
-  "time": 0.029200077056884766,
-  "program": "% unable to learn a solution\n"
-}

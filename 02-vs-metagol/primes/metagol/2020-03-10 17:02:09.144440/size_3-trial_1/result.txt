@@ -1,6 +1,0 @@
-{
-  "size": 3,
-  "trial": 1,
-  "time": 0.1503152847290039,
-  "program": "% WARNING: bottom0/1 does not exist\n% learning f/1\n% clauses: 1\n% clauses: 2\nf(A):-div2(A),f_1(A).\nf_1(A):-div3(A),div5(A).\n"
-}

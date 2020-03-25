@@ -1,0 +1,1 @@
+f(A) :- div11(A),div13(A),div17(A),div19(A),div2(A),div23(A),div3(A),div5(A),div7(A).

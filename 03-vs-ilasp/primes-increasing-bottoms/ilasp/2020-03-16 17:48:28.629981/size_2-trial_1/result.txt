@@ -1,6 +1,0 @@
-{
-  "size": 2,
-  "trial": 1,
-  "time": 40.5584557056427,
-  "program": "f(V0) :- div2(V0), div3(V0), div5(V0), div7(V0).\n\nPre-processing  : 0.061s\nSolve time      : 40.481s\nTotal           : 40.543s\n"
-}

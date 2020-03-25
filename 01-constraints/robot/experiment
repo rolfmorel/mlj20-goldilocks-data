@@ -1,0 +1,114 @@
+#!/usr/bin/env python
+
+import datetime
+import os
+import shutil
+import sys
+import contextlib
+import time
+import threading
+import json
+
+try:
+    import thread
+except ImportError:
+    import _thread as thread
+
+from multiprocessing import Pool
+from glob import glob
+from itertools import product
+from collections import defaultdict
+from statistics import mean, stdev
+
+POOL_SIZE = 3
+#POOL_SIZE = 1
+
+TIMEOUT = 120
+
+POS_EXAMPLES = 2 # NB: ignored for now
+NEG_EXAMPLES = 0 # NB: ignored for now
+CLAUSES = 1
+TRIALS = 2
+
+MIN_SIZE = 1
+MAX_SIZE = 10
+
+goldilocks = None
+sys.path.append("../../systems/goldilocks/")
+import chimera.main as goldilocks
+from chimera.util import working_directory
+
+def gen_params(max_vars, size):
+    xs = []
+    xs.append(f"max_vars({size+1}).")
+    xs.append(f"max_body({size}).")
+    xs.append(f"max_clauses({CLAUSES}).")
+    xs.append(f"max_pos_x({size}).")
+    xs.append(f"max_pos_y({size}).")
+    return '\n'.join(xs) + '\n'
+
+def gen_params(max_vars, size):
+    return f'pos(f(w(0,0,1,1,0),w({size},0,1,1,0))).\n'
+
+def main(args):
+    use_constraints, trial, size = args
+    flag = "constrained" if use_constraints else "unconstrained"
+    task_name = f"{flag}-size_{size}-trial_{trial}"
+
+    for file_ in glob("../../*.asp.pl") + glob("../../*.prolog.pl"):
+        shutil.copyfile(file_, os.path.basename(file_))
+
+    task_path = os.path.dirname(os.path.realpath(__file__)) + f"/{DATETIME}/{task_name}"
+
+    before = time.time()
+
+    timer = threading.Timer(TIMEOUT, lambda: thread.interrupt_main())
+    timer.start()
+    try:
+        program = goldilocks.main(os.getcwd(), {'constrain_specializations': use_constraints})
+    except KeyboardInterrupt:
+        program = False  # NB: signifies synthesizer did not return
+    finally:
+        timer.cancel()
+
+    after = time.time()
+
+    result = {'use_constraints': use_constraints,
+              'size': size,
+              'trial': trial,
+              'time': after - before,
+              'program': program}
+
+    print(json.dumps(result, indent=2), file=results)
+    print(json.dumps(result))
+
+    return result
+
+if __name__ == "__main__":
+    DATETIME = str(datetime.datetime.now())
+    with working_directory("./" + DATETIME):
+        with Pool(POOL_SIZE) as pool:
+            use_constraints = [True,False]
+            trials = range(1, TRIALS+1)
+            sizes = range(MIN_SIZE, MAX_SIZE + 1)
+            process_args = product(use_constraints, trials, sizes)
+            #process_args = [(True,1,10)]
+            results = pool.map(main, process_args)
+            collected_results = defaultdict(lambda: defaultdict(list))
+            for res in results:
+                collected_results[res['use_constraints']][res['size']] += [res['time']]
+
+            with open("results.txt", 'w') as results,\
+                 open("constrained.table", 'w') as constrained,\
+                 open("unconstrained.table", 'w') as unconstrained:
+                mean_times = defaultdict(lambda: defaultdict(dict))
+                constrained.write("size time error\n")
+                unconstrained.write("size time error\n")
+                for i in sizes:
+                    times = collected_results[True][i]
+                    mean_times['constrained'][i] = {'mean': mean(times), 'stdev': stdev(times)}
+                    constrained.write(f"{i} {mean(times)} {stdev(times)}\n")
+                    times = collected_results[False][i]
+                    mean_times['unconstrained'][i] = {'mean': mean(times), 'stdev': stdev(times)}
+                    unconstrained.write(f"{i} {mean(times)} {stdev(times)}\n")
+                results.write(json.dumps(mean_times, indent=2))

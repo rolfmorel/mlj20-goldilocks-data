@@ -1,8 +1,0 @@
-{
-  "constraintness": false,
-  "size": 9,
-  "trial": 1,
-  "time": 120.18866348266602,
-  "time_breakdown": null,
-  "program": false
-}
