@@ -1,7 +1,0 @@
-{
-  "constraintness": false,
-  "size": 7,
-  "trial": 2,
-  "time": 120.11006903648376,
-  "program": false
-}
