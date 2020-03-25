@@ -3,7 +3,7 @@ max_body(10).
 max_clauses(1).
 
 %% add the last element to the head
-%% f(A,B):-last(A,C),append(C,A,D),append(C,D,B).
+%% f(A,B):-last(A,C),append(C,A,B)
 
 modeh(f,2).
 type(f,0,list).
