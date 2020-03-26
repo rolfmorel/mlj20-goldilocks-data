@@ -3,14 +3,9 @@ max_body(10).
 max_clauses(1).
 
 %% add the last element to the head
-%% f(A:list,B:list):-
-%%     last(A:list,C:ele),
-%%     cons(C:ele,A:list,B:list)
-
 %% f(A,B):-
 %%     last(A,C),
-%%     cons(C,A,D),
-%%     cons(C,D,B).
+%%     cons(C,A,B).
 
 modeh(f,2).
 type(f,0,list).
