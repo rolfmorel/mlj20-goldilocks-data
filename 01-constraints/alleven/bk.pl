@@ -6,4 +6,5 @@ sum(A,B,C):-
     C is A+B.
 empty([]).
 zero(0).
-
+even(A):-
+    0 is A mod 2.
