@@ -12,6 +12,20 @@ max_clauses(2).
     modeh(P,A),
     body_literal(0,_,P,A).
 
+%% IF YOU UNCOMMENT THESE LINES THERE THERE ARE ONLY THREE MODELS INCLUDING THE TARGET ONE
+%% :-
+%%     #count{Clause,Literal : body_literal(Clause,Literal,P,A)} != 5.
+%% :-
+%%     not body_literal(0,1,empty,1).
+%% :-
+%%     not body_literal(1,_,f,1).
+%% :-
+%%     not body_literal(1,_,even,1).
+%% :-
+%%     not body_literal(1,_,head,2).
+%% :-
+%%     not body_literal(1,_,tail,2).
+
 modeh(f,1).
 type(f,0,list).
 direction(f,0,in).
@@ -29,13 +43,14 @@ type(head,1,element).
 direction(head,0,in).
 direction(head,1,out).
 
-modeb(last,2).
+%% works without this
+%% modeb(last,2).
 type(last,0,list).
 type(last,1,element).
 direction(last,0,in).
 direction(last,1,out).
 
-modeb(length,2).
+%% modeb(length,2).
 type(length,0,list).
 type(length,1,int).
 direction(length,0,in).
@@ -62,7 +77,7 @@ type(empty,0,list).
 direction(empty,0,in).
 
 modeb(zero,1).
-type(zero,0,int).
+type(zero,0,element).
 direction(zero,0,in).
 
 modeb(even,1).
