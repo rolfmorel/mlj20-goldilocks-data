@@ -39,10 +39,8 @@ def get_prog_file(system, trial):
 def get_results_file(system, trial):
     return f'results/{system}/{trial}.pl'
 
-def add_last(xs):
-    # %% add the last element to the head
-    # %% f(A,B):-last(A,C),append(C,A,D).
-    return [xs[-1]] + xs
+def droplast(xs):
+    return xs[:-1]
 
 def gen_list():
     n = random.randint(1, MAX_LIST_SIZE+1)
@@ -50,7 +48,7 @@ def gen_list():
 
 def gen_pos_examples(num_examples):
     xs = [gen_list() for i in range(num_examples)]
-    ys = [add_last(x) for x in xs]
+    ys = [droplast(x) for x in xs]
     return zip(xs, ys)
 
 def gen_neg_examples(num_examples):
@@ -130,8 +128,8 @@ def print_results():
         print(get_accs(system), get_times(system))
 
 # gen_data()
-# for k in [1,2,3]:
-#     for system in systems:
-#         learn_((system, k))
-#         test_((system,k))
-print_results()
+for k in [1,2,3]:
+    for system in systems:
+        learn_((system, k))
+        test_((system,k))
+# print_results()

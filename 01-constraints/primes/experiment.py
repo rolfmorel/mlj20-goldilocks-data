@@ -106,18 +106,18 @@ def get_times(system, size):
             times.append(info['_total'])
     return times
 
-def ci95(xs):
-    sem = stats.sem(xs)
-    confidence = 0.95
-    n = len(xs)
-    return sem * stats.t.ppf((1 + confidence) / 2, n - 1)
+# def ci95(xs):
+#     sem = stats.sem(xs)
+#     confidence = 0.95
+#     n = len(xs)
+#     return sem * stats.t.ppf((1 + confidence) / 2, n - 1)
 
 def results():
     for system in systems:
         print('size time error')
         for size in sizes:
             times = get_times(system, size)
-            print(f'{size} {np.mean(times)} {ci95(times)}')
+            print(f'{size} {np.mean(times)} {stats.sem(times)}')
 
 # gen_data()
 # learn()
