@@ -6,17 +6,28 @@ max_clauses(2).
 %% f(A):-empty(A).
 %% f(A):-head(A,B),even(B),tail(A,C),f(C).
 
+
+%% f(A) :- tail(A,B),empty(B).
+%% f(A) :- tail(A,B),f(B),head(B,C),even(C).
+%% % solved,1
+%% % time,11.003891388000001
+
 %% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
 %% PREVENT RECURSION IN THE FIRST CLAUSE
 :-
     modeh(P,A),
     body_literal(0,_,P,A).
 
+%% :-
+%%     modeh(P,A),
+%%     body_literal(Clause,Literal,P,A),
+%%     var(Clause,Literal,_,0).
+
 %% IF YOU UNCOMMENT THESE LINES THERE THERE ARE ONLY THREE MODELS INCLUDING THE TARGET ONE
 %% :-
 %%     #count{Clause,Literal : body_literal(Clause,Literal,P,A)} > 5.
 %% :-
-%%     not body_literal(0,1,empty,1).
+    %% not body_literal(0,1,empty,1).
 %% :-
 %%     not body_literal(1,_,f,1).
 %% :-

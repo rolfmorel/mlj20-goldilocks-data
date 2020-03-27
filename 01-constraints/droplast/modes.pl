@@ -18,6 +18,10 @@ max_clauses(2).
 :-
     modeh(P,A),
     body_literal(0,_,P,A).
+:-
+    modeh(P,A),
+    body_literal(Clause,Literal,P,A),
+    var(Clause,Literal,_,0).
 
 modeh(f,2).
 type(f,0,list).

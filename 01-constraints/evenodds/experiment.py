@@ -109,7 +109,7 @@ def learn_(args):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
     duration = context.as_dict()['_total']
     save_prog(program, duration, get_prog_file(system, trial))
 
@@ -149,8 +149,10 @@ def print_results():
         print(get_accs(system), get_times(system))
 
 # gen_data()
-for k in [1]:
-    for system in ['popper']:
-        learn_((system, k))
+# for k in [1]:
+    # for system in ['popper']:
+        # learn_((system, k))
 #         test_((system,k))
 # print_results()
+
+learn_(('popper', 1))

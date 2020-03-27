@@ -23,6 +23,9 @@ max_clauses(2).
     body_literal(Clause,Literal,P,A),
     var(Clause,Literal,_,0).
 
+%% :-
+    %% not
+
 modeh(f,2).
 type(f,0,list).
 type(f,1,int).
@@ -77,6 +80,10 @@ direction(empty,0,in).
 modeb(zero,1).
 type(zero,0,int).
 direction(zero,0,in).
+
+modeb(zero2,1).
+type(zero2,0,int).
+direction(zero2,0,out).
 
 modeb(succ,2).
 type(succ,0,int).

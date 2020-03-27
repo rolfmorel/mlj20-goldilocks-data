@@ -129,9 +129,11 @@ def print_results():
     for system in systems:
         print(get_accs(system), get_times(system))
 
-gen_data()
-for k in trials:
-    for system in systems:
-        learn_((system, k))
-        test_((system,k))
-print_results()
+# gen_data()
+# for k in trials:
+#     for system in systems:
+#         learn_((system, k))
+#         test_((system,k))
+# print_results()
+
+learn_(('popper', 1))

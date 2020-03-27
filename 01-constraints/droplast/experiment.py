@@ -128,8 +128,9 @@ def print_results():
         print(get_accs(system), get_times(system))
 
 # gen_data()
-for k in [1,2,3]:
-    for system in systems:
-        learn_((system, k))
-        test_((system,k))
+# for k in [1,2,3]:
+#     for system in systems:
+#         learn_((system, k))
+#         test_((system,k))
 # print_results()
+learn_(('popper', 1))
