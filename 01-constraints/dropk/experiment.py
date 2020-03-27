@@ -11,9 +11,8 @@ import scipy.stats as stats
 sys.path.append('../../')
 import common
 
-# TIMEOUT = 120
-TIMEOUT = 180
-NUM_TRIALS = 3
+TIMEOUT = 120
+NUM_TRIALS = 1
 MODES_FILE = 'modes.pl'
 BK_FILE = 'bk.pl'
 GROUND_CONSTRAINTS = False
@@ -40,52 +39,42 @@ def get_prog_file(system, trial):
 def get_results_file(system, trial):
     return f'results/{system}/{trial}.pl'
 
-def droplast(xs):
+def dropk(xs):
     return xs[:-1]
 
-def gen_even_list():
-    evens = [x for x in range(1, MAX_ELEMENT+1) if x % 2 == 0]
+def gen_list():
     n = random.randint(2, MAX_LIST_SIZE+1)
-    return list(np.random.choice(evens, n))
+    return [random.randint(1, MAX_ELEMENT+1) for i in range(n)]
 
 def gen_pos_examples(num_examples):
-    return [gen_even_list() for i in range(num_examples)]
-
-def gen_neg_example_():
-    odds = [x for x in range(1, MAX_ELEMENT+1) if x % 2 == 1]
-    xs = gen_even_list()
-    num_mutations = random.randint(1, len(xs))
-    # print(len(xs), num_mutations)
-    changes = set(np.random.choice(len(xs), num_mutations, replace=False))
-    out = []
-    for i, x in enumerate(xs):
-        # print(i, x)
-        if i in changes:
-            out.append(np.random.choice(odds,1)[0])
-        else:
-            out.append(x)
-
-    # print('--')
-    # print(xs)
-    # print(out)
-    return out
+    for i in range(num_examples):
+        x = gen_list()
+        y = random.randint(0, len(x))
+        z = x[y:]
+        yield f'f({x},{y},{z})'
 
 def gen_neg_examples(num_examples):
-    return [gen_neg_example_() for i in range(num_examples)]
+    for i in range(num_examples):
+        x = gen_list()
+        y = random.randint(0, len(x))
+        print(len(x),y)
+        k = np.random.choice([i for i in range(0,len(x)) if i != y],1)[0]
+        z = x[k:]
+        yield f'f({x},{y},{z})'
 
 def gen_data_(trial):
     # train data
     with open(get_train_data_file(trial), 'w') as f:
-        for x in gen_pos_examples(NUM_TRAIN_EXAMPLES):
-            f.write(f'pos(f({x})).\n')
-        for x in gen_neg_examples(NUM_TRAIN_EXAMPLES):
-            f.write(f'neg(f({x})).\n')
+        for atom in gen_pos_examples(NUM_TRAIN_EXAMPLES):
+            f.write(f'pos({atom}).\n')
+        for atom in gen_neg_examples(NUM_TRAIN_EXAMPLES):
+            f.write(f'neg({atom}).\n')
     # test data
     with open(get_test_data_file(trial), 'w') as f:
-        for x in gen_pos_examples(NUM_TEST_EXAMPLES):
-            f.write(f'pos(f({x})).\n')
-        for x in gen_neg_examples(NUM_TEST_EXAMPLES):
-            f.write(f'neg(f({x})).\n')
+        for atom in gen_pos_examples(NUM_TEST_EXAMPLES):
+            f.write(f'pos({atom}).\n')
+        for atom in gen_neg_examples(NUM_TEST_EXAMPLES):
+            f.write(f'neg({atom}).\n')
 
 def gen_data():
     for trial in trials:
@@ -146,11 +135,9 @@ def print_results():
         print(get_accs(system), get_times(system))
 
 # gen_data()
-for k in trials:
-    # for system in systems:
-    for system in ['popper']:
-    # for system in ['unconstrained']:
-    # for system in ['popper','unconstrained']:
-        learn_((system, k))
-        # test_((system,k))
+learn_(('popper',1))
+# for k in [1,2,3]:
+#     for system in systems:
+#         learn_((system, k))
+#         test_((system,k))
 # print_results()

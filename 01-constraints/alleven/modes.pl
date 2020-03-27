@@ -14,7 +14,7 @@ max_clauses(2).
 
 %% IF YOU UNCOMMENT THESE LINES THERE THERE ARE ONLY THREE MODELS INCLUDING THE TARGET ONE
 %% :-
-%%     #count{Clause,Literal : body_literal(Clause,Literal,P,A)} != 5.
+%%     #count{Clause,Literal : body_literal(Clause,Literal,P,A)} > 5.
 %% :-
 %%     not body_literal(0,1,empty,1).
 %% :-
@@ -43,14 +43,13 @@ type(head,1,element).
 direction(head,0,in).
 direction(head,1,out).
 
-%% works without this
-%% modeb(last,2).
+modeb(last,2).
 type(last,0,list).
 type(last,1,element).
 direction(last,0,in).
 direction(last,1,out).
 
-%% modeb(length,2).
+modeb(length,2).
 type(length,0,list).
 type(length,1,int).
 direction(length,0,in).
