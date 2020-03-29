@@ -6,4 +6,4 @@ sum(A,B,C):-
     C is A+B.
 empty([]).
 zero(0).
-
+zero2(0).

@@ -11,7 +11,7 @@ import scipy.stats as stats
 sys.path.append('../../')
 import common
 
-TIMEOUT = 120
+TIMEOUT = 600
 EVAL_TIMEOUT = 0.5
 NUM_TRIALS = 1
 MODES_FILE = 'modes.pl'

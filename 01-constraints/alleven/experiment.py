@@ -12,7 +12,7 @@ sys.path.append('../../')
 import common
 
 # TIMEOUT = 120
-TIMEOUT = 180
+TIMEOUT = 600
 EVAL_TIMEOUT = 1
 NUM_TRIALS = 3
 MODES_FILE = 'modes.pl'

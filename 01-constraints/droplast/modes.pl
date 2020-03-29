@@ -1,5 +1,5 @@
 max_vars(5).
-max_body(10).
+max_body(4).
 max_clauses(2).
 
 %% DROPLAST
@@ -22,6 +22,13 @@ max_clauses(2).
     modeh(P,A),
     body_literal(Clause,Literal,P,A),
     var(Clause,Literal,_,0).
+
+:-
+    clause(Clause),
+    modeh(P,A),
+    body_literal(Clause,I1,P,A),
+    body_literal(Clause,I2,P,A),
+    I1 != I2.
 
 modeh(f,2).
 type(f,0,list).
