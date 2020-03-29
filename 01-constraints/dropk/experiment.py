@@ -4,7 +4,7 @@ import os
 import sys
 import json
 import random
-import popper.main
+import popper.entry_point
 import multiprocessing
 import numpy as np
 import scipy.stats as stats
@@ -12,6 +12,7 @@ sys.path.append('../../')
 import common
 
 TIMEOUT = 120
+EVAL_TIMEOUT = 0.5
 NUM_TRIALS = 1
 MODES_FILE = 'modes.pl'
 BK_FILE = 'bk.pl'
@@ -49,7 +50,7 @@ def gen_list():
 def gen_pos_examples(num_examples):
     for i in range(num_examples):
         x = gen_list()
-        y = random.randint(0, len(x))
+        y = random.randint(1, len(x))
         z = x[y:]
         yield f'f({x},{y},{z})'
 
@@ -57,7 +58,7 @@ def gen_neg_examples(num_examples):
     for i in range(num_examples):
         x = gen_list()
         y = random.randint(0, len(x))
-        print(len(x),y)
+        # print(len(x),y)
         k = np.random.choice([i for i in range(0,len(x)) if i != y],1)[0]
         z = x[k:]
         yield f'f({x},{y},{z})'
@@ -95,7 +96,8 @@ def learn_(args):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    # (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    (program, context) = popper.entry_point.run_experiment('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
     duration = context.as_dict()['_total']
     save_prog(program, duration, get_prog_file(system, trial))
 

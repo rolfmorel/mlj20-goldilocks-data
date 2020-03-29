@@ -6,6 +6,7 @@ sum(A,B,C):-
     C is A+B.
 empty([]).
 zero(0).
+one(1).
 equal(A,A).
 decrement(A,B):-
     B is A-1.

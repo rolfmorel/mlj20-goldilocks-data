@@ -4,7 +4,7 @@ import os
 import sys
 import json
 import random
-import popper.main
+import popper.entry_point
 import multiprocessing
 import numpy as np
 import scipy.stats as stats
@@ -13,6 +13,7 @@ import common
 
 # TIMEOUT = 120
 TIMEOUT = 180
+EVAL_TIMEOUT = 1
 NUM_TRIALS = 3
 MODES_FILE = 'modes.pl'
 BK_FILE = 'bk.pl'
@@ -106,7 +107,8 @@ def learn_(args):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    # (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    (program, context) = popper.entry_point.run_experiment('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
     duration = context.as_dict()['_total']
     save_prog(program, duration, get_prog_file(system, trial))
 

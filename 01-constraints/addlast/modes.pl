@@ -1,5 +1,5 @@
 max_vars(5).
-max_body(10).
+max_body(6).
 max_clauses(1).
 
 %% add the last element to the head
@@ -25,7 +25,7 @@ type(head,1,element).
 direction(head,0,in).
 direction(head,1,out).
 
-%modeb(last,2).
+modeb(last,2).
 type(last,0,list).
 type(last,1,element).
 direction(last,0,in).

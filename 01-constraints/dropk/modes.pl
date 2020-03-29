@@ -1,5 +1,5 @@
 max_vars(5).
-max_body(10).
+max_body(3).
 max_clauses(2).
 
 %% DROPK
@@ -11,11 +11,33 @@ max_clauses(2).
 %%     decrement(B,E),
 %%     dropk(D,E,C).
 
+%% dropk(A,B,C):-
+%%     one(B),
+%%     tail(A,C).
+%% dropk(A,B,C):-
+%%     tail(A,D),
+%%     decrement(B,E),
+%%     dropk(D,E,C).
+
+
 %% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
 %% PREVENT RECURSION IN THE FIRST CLAUSE
 :-
     modeh(P,A),
     body_literal(0,_,P,A).
+
+:-
+    clause(Clause),
+    modeh(P,A),
+    body_literal(Clause,I1,P,A),
+    body_literal(Clause,I2,P,A),
+    I1 != I2.
+
+:-
+    modeh(P,A),
+    body_literal(Clause,I,P,A),
+    var(Clause,I,0,0),
+    var(Clause,I,1,1).
 
 modeh(f,3).
 type(f,0,list).
@@ -50,7 +72,7 @@ type(mylen,1,int).
 direction(mylen,0,in).
 direction(mylen,1,out).
 
-modeb(sum,3).
+%% modeb(sum,3).
 type(sum,0,int).
 type(sum,1,int).
 type(sum,2,int).
@@ -58,7 +80,7 @@ direction(sum,0,in).
 direction(sum,1,in).
 direction(sum,2,out).
 
-modeb(cons,3).
+%% modeb(cons,3).
 type(cons,0,element).
 type(cons,1,list).
 type(cons,2,list).
@@ -70,9 +92,13 @@ modeb(empty,1).
 type(empty,0,list).
 direction(empty,0,in).
 
-modeb(zero,1).
-type(zero,0,int).
-direction(zero,0,in).
+%% modeb(zero,1).
+%% type(zero,0,int).
+%% direction(zero,0,in).
+
+modeb(one,1).
+type(one,0,int).
+direction(one,0,in).
 
 modeb(decrement,2).
 type(decrement,0,int).
@@ -80,11 +106,11 @@ type(decrement,1,int).
 direction(decrement,0,in).
 direction(decrement,1,out).
 
-modeb(equal,2).
-type(equal,0,list).
-type(equal,1,list).
-direction(equal,0,in).
-direction(equal,1,out).
+%% modeb(equal,2).
+%% type(equal,0,list).
+%% type(equal,1,list).
+%% direction(equal,0,in).
+%% direction(equal,1,out).
 
 #show var/4.
 #show literal/4.
