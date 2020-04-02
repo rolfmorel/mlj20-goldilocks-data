@@ -1,1 +1,1 @@
-f(A) :- div2(A),div3(A).
+f(V0) :- div2(V0),div3(V0).

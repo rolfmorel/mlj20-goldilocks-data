@@ -15,20 +15,20 @@ max_clauses(2).
 
 %% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
 %% PREVENT RECURSION IN THE FIRST CLAUSE
-:-
-    modeh(P,A),
-    body_literal(0,_,P,A).
-:-
-    modeh(P,A),
-    body_literal(Clause,Literal,P,A),
-    var(Clause,Literal,_,0).
+%% :-
+%%     modeh(P,A),
+%%     body_literal(0,_,P,A).
+%% :-
+%%     modeh(P,A),
+%%     body_literal(Clause,Literal,P,A),
+%%     var(Clause,Literal,_,0).
 
-:-
-    clause(Clause),
-    modeh(P,A),
-    body_literal(Clause,I1,P,A),
-    body_literal(Clause,I2,P,A),
-    I1 != I2.
+%% :-
+%%     clause(Clause),
+%%     modeh(P,A),
+%%     body_literal(Clause,I1,P,A),
+%%     body_literal(Clause,I2,P,A),
+%%     I1 != I2.
 
 modeh(f,2).
 type(f,0,list).
@@ -85,5 +85,5 @@ modeb(zero,1).
 type(zero,0,int).
 direction(zero,0,in).
 
-#show var/4.
-#show literal/4.
+%% #show var/4.
+%% #show literal/4.

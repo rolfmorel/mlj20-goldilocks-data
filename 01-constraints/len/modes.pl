@@ -2,30 +2,6 @@ max_vars(4).
 max_body(3).
 max_clauses(2).
 
-%% len(A,B):-
-%%     empty(A),
-%%     zero(B).
-%% len(A,B):-
-%%     tail(A,C),
-%%     f(C,D),
-%%     succ(D,B).
-
-%% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
-%% PREVENT RECURSION IN THE FIRST CLAUSE
-
-:-
-    modeh(P,A),
-    body_literal(0,_,P,A).
-
-%% PREVENT f(A,B):-..., f(A,_), ...
-:-
-    modeh(P,A),
-    body_literal(Clause,Literal,P,A),
-    var(Clause,Literal,_,0).
-
-%% :-
-    %% not
-
 modeh(f,2).
 type(f,0,list).
 type(f,1,int).
@@ -90,8 +66,3 @@ type(succ,0,int).
 type(succ,1,int).
 direction(succ,0,in).
 direction(succ,1,out).
-
-
-
-#show var/4.
-#show literal/4.

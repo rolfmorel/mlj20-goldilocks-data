@@ -1,4 +1,4 @@
-f(A,B) :- empty(A),zero2(B).
-f(A,B) :- tail(A,C),f(C,D),succ(D,B).
+f(V0,V1) :- zero2(V1),empty(V0).
+f(V0,V1) :- tail(V0,V3),f(V3,V2),succ(V2,V1).
 % solved,1
-% time,108.94120378100007
+% time,86.53412521800016

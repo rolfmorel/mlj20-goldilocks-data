@@ -91,7 +91,7 @@ def learn_(args):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    (program, context) = popper.entry_point.run_experiment('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
+    (program, context) = popper.entry_point.run_experiment('modes.pl', 'bk.pl', get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
     duration = context.as_dict()['_total']
     save_prog(program, duration, get_prog_file(system, trial))
 

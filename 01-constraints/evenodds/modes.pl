@@ -6,11 +6,12 @@ max_clauses(2).
 %% f(A):-head(A,B),even(B),tail(A,C),head(C,D),even(D).
 %% f(A):-head(A,B),odd(B),tail(A,C),head(C,D),odd(D).
 
-%% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
-%% PREVENT RECURSION IN THE FIRST CLAUSE
-:-
-    modeh(P,A),
-    body_literal(0,_,P,A).
+%% UNCOMMENT BELOW TO FIND THE SOLUTION
+%% :-
+%%     %% head(A,B)
+%%     clause(C),
+%%     not body_literal(C,head,_,(0,1)).
+
 
 modeh(f,1).
 type(f,0,list).
@@ -73,5 +74,5 @@ modeb(odd,1).
 type(odd,0,element).
 direction(odd,0,in).
 
-#show var/4.
-#show literal/4.
+%% #show var/4.
+%% #show literal/4.

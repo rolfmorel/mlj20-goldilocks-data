@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import json
-import popper.main
+import popper.entry_point
 import multiprocessing
 import numpy as np
 import scipy.stats as stats
 
 TIMEOUT = 120
+EVAL_TIMEOUT = 1
 NUM_TRIALS = 3
 MAX_SIZE = 12
 MODES_FILE = 'modes.pl'
@@ -91,7 +92,9 @@ def learn_(args):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_data_file(size, trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    # (program, context) = popper.main.run2('modes.pl', 'bk.pl', get_data_file(size, trial), MAX_LITERALS, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+    (program, context) = popper.entry_point.run_experiment('modes.pl', 'bk.pl', get_data_file(size, trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
+    duration = context.as_dict()['_total']
     save_prog(program, get_prog_file(system, size, trial))
     save_results(context.as_dict(), get_results_file(system, size, trial))
 
@@ -121,4 +124,7 @@ def results():
 
 # gen_data()
 # learn()
-results()
+# results()
+
+# def learn_(args):
+learn_(('popper',10, 1))

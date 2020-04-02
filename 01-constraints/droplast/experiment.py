@@ -11,12 +11,13 @@ import scipy.stats as stats
 sys.path.append('../../')
 import common
 
-TIMEOUT = 600
+TIMEOUT = 300
 EVAL_TIMEOUT = 0.5
 NUM_TRIALS = 3
 MODES_FILE = 'modes.pl'
 BK_FILE = 'bk.pl'
-GROUND_CONSTRAINTS = False
+# GROUND_CONSTRAINTS = False
+GROUND_CONSTRAINTS = True
 MAX_LITERALS = 20
 NUM_CPUS = 7
 NUM_TRAIN_EXAMPLES = 5

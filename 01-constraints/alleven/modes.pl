@@ -14,9 +14,9 @@ max_clauses(2).
 
 %% NEED TO EVENTUALLY ADD THIS CONSTRAINT TO THE MAIN ALAN ENCODING
 %% PREVENT RECURSION IN THE FIRST CLAUSE
-:-
-    modeh(P,A),
-    body_literal(0,_,P,A).
+%% :-
+%%     modeh(P,A),
+%%     body_literal(0,_,P,A).
 
 %% :-
 %%     modeh(P,A),
