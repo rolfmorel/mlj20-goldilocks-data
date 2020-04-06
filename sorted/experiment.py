@@ -27,7 +27,7 @@ MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
 # systems = ['popper', 'metagol', 'unconstrained']
-systems = ['popper']
+systems = ['metagol']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -170,4 +170,4 @@ def results():
 # learn()
 # evaluate()
 # results()
-learn_(('unconstrained',1))
+learn_(('metagol',1))
