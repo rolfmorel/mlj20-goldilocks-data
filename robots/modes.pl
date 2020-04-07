@@ -22,13 +22,13 @@ modeb(move_down,2).
 direction(move_down,0,in).
 direction(move_down,1,out).
 
-modeb(pickup,2).
-direction(pickup,0,in).
-direction(pickup,1,out).
-
-modeb(drop,2).
-direction(drop,0,in).
-direction(drop,1,out).
+%modeb(pickup,2).
+%direction(pickup,0,in).
+%direction(pickup,1,out).
+%
+%modeb(drop,2).
+%direction(drop,0,in).
+%direction(drop,1,out).
 
 %:- not body_literal(0,pickup,2,(0,2)).
 %:- not body_literal(0,move_right,2,(2,3)).
