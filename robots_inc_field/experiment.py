@@ -14,7 +14,7 @@ from tempfile import NamedTemporaryFile
 sys.path.append('../')
 import common
 
-TIMEOUT = 240
+TIMEOUT = 600
 EVAL_TIMEOUT = 0.1
 NUM_TRIALS = 10
 MAX_SIZE = 20
@@ -29,8 +29,10 @@ NUM_TEST_EXAMPLES = 100
 trials = list(range(1,NUM_TRIALS+1))
 trials = [1,2]
 sizes = list(range(3,MAX_SIZE+1))
-sizes = [3,6,9,12,15,18]
+#sizes = [3,6,9,12,15,18]
+sizes = [10]
 systems = ['popper','unconstrained','metagol','ilasp']
+systems = ['popper']
 jobs = [(system, size, trial) for size in sizes for trial in trials for system in systems]
 
 
@@ -117,8 +119,10 @@ def call_ilasp(size, trial):
         tmpfile.flush()
 
         t1 = time.time()
-        output = common.call_asp(' '.join(['ilasp', '--clingo5', '--version=2', tmpfile.name]))
+        output = common.call_asp(' '.join(['ilasp', '--clingo5', '--version=2', #'-s',
+            '-ml=5', '--max-rule-length=6', '--no-constraints', '--no-aggregates', tmpfile.name]), timeout=TIMEOUT)
         t2 = time.time()
+        print(output)
 
         prog = list(filter(lambda line: ':-' in line, output.split('\n')))
         d = f'%time,{t2-t1}'
@@ -147,7 +151,7 @@ def call_popper(system, size, trial):
         tmp_bk.flush()
 
         t1 = time.time()
-        (prog, context) = popper.entry_point.run_experiment('modes.pl', tmp_bk.name, get_train_data_file(size, trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT)
+        (prog, context) = popper.entry_point.run_experiment('modes.pl', tmp_bk.name, get_train_data_file(size, trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
         t2 = time.time()
         d = f'%time,{t2-t1}'
         if prog == None or prog == False:
@@ -178,7 +182,7 @@ def rand_coord(size):
 
 def gen_pos_example(size):
     start_x, start_y = rand_coord(size - 2)
-    end_x, end_y = start_x + 2, start_y + 1
+    end_x, end_y = start_x + 2, start_y + 2
 
 ##    start_state = f'w({start_x},{start_y},{start_x},{start_y},0)'
 ##    end_state = f'w({end_x},{end_y},{end_x},{end_y},0)'
@@ -188,7 +192,7 @@ def gen_pos_example(size):
 
 def gen_neg_example(size):
     start_x, start_y = rand_coord(size - 1)
-    end_x, end_y = start_x + 2, start_y + 1
+    end_x, end_y = start_x + 2, start_y + 2
     coord_to_change = random.randint(0,3)
     add_one = random.choice([0, 1])
 
@@ -237,4 +241,4 @@ learn()
 evaluate()
 text = results()
 print(text)
-save_results(text, 'results.txt')
+#save_results(text, 'results.txt')

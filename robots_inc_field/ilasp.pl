@@ -1,10 +1,10 @@
-#modeh(1,f(var(state),var(state)), (anti_reflexive)).
-#modeb(1,move_left(var(state),var(state)), (positive,anti_reflexive)).
-#modeb(1,move_right(var(state),var(state)), (positive,anti_reflexive)).
-#modeb(1,move_up(var(state),var(state)), (positive,anti_reflexive)).
-#modeb(1,move_down(var(state),var(state)), (positive,anti_reflexive)).
+#modeh(1,f(var(state),var(state))).
+#modeb(1,move_left(var(state),var(state)), (positive)).
+#modeb(1,move_right(var(state),var(state)), (positive)).
+#modeb(1,move_up(var(state),var(state)), (positive)).
+#modeb(1,move_down(var(state),var(state)), (positive)).
 
-#maxv(4).
+#maxv(6).
 
 %% size(4).
 %%position(1..4).
