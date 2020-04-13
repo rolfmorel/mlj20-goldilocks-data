@@ -5,7 +5,7 @@
 #modeb(1,move_up(var(state),var(state)), (positive)).
 #modeb(1,move_down(var(state),var(state)), (positive)).
 
-#maxv(3).
+#maxv(4).
 
 %% size(4).
 %%position(1..4).

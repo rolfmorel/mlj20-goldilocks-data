@@ -1,3 +1,6 @@
+import os
+import signal
+import psutil
 import time
 import subprocess
 import multiprocessing
@@ -27,17 +30,20 @@ def call_(cmd, action=None, timeout=60):
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     print(cmd, action)
     if action != None:
-        p.stdin.write(action.encode())
+        p.stdin.write(action.encode('utf-8'))
     try:
         output, _err = p.communicate(timeout = timeout)
         return output.decode()
     except subprocess.TimeoutExpired:
         pass
     finally:
+        parent = psutil.Process(p.pid)
+        for child in parent.children(recursive=True):
+            child.kill()
         p.kill()
 
-def call_asp(cmd):
-    return call_(cmd)
+def call_asp(cmd, timeout=60):
+    return call_(cmd, timeout=timeout)
 
 def call_prolog(files, action, timeout=60):
     files = ','.join((f"'{x}'" for x in files))

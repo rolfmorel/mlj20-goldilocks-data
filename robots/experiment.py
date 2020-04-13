@@ -19,25 +19,33 @@ from popper.util.data_types import Result
 sys.path.append('../')
 import common
 
-TIMEOUT = 600
-EVAL_TIMEOUT = 0.01
+NUM_CPUS = 3
+
 NUM_TRIALS = 10
+
+NUM_TRAIN_EXAMPLES = 5  # both this number of positive as well as negative examples
+NUM_TEST_EXAMPLES = 1000
+
+TIMEOUT = 600
+
+MIN_SIZE = 4
 MAX_SIZE = 20
+
+EVAL_TIMEOUT = 0.01
+
 MODES_FILE = 'modes.pl'
 BK_FILE = 'bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 1
-NUM_TRAIN_EXAMPLES = 3  # both this number of positive as well as negative examples
-NUM_TEST_EXAMPLES = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-trials = [1,2]
-sizes = list(range(3,MAX_SIZE+1))
-#sizes = [3,6,9,12,15,18]
-sizes = [4,6,8,10]
+sizes = list(range(MIN_SIZE, MAX_SIZE + 1, 2))
 systems = ['popper-prolog','popper-datalog','unconstrained-prolog','unconstrained-datalog','metagol','ilasp']
-#systems = ['popper-prolog']
+
+#systems = ['ilasp']
+#sizes = [14,16]
+#trials = [1,2]
+
 jobs = [(system, size, trial) for size in sizes for trial in trials for system in systems]
 
 
@@ -97,7 +105,7 @@ def results():
             for size in sizes:
                 times = get_times(system, size)
                 f.write(f'{size} {np.mean(times)} {stats.sem(times)}\n')
-        text += open(f"{system}-acc.table").read() + open(f"{system}-time.table").read()
+        text += open(f"results/{system}-acc.table").read() + open(f"results/{system}-time.table").read()
     return text
 
 ###############################################################################################
