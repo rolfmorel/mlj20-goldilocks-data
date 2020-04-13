@@ -37,9 +37,12 @@ def call_(cmd, action=None, timeout=60):
     except subprocess.TimeoutExpired:
         pass
     finally:
-        parent = psutil.Process(p.pid)
-        for child in parent.children(recursive=True):
-            child.kill()
+        try:
+            parent = psutil.Process(p.pid)
+            for child in parent.children(recursive=True):
+                child.kill()
+        except psutil.NoSuchProcess:
+            pass
         p.kill()
 
 def call_asp(cmd, timeout=60):
