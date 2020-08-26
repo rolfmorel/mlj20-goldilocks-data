@@ -16,8 +16,8 @@ import common
 
 NUM_CPUS = 3
 
-FIELD_SIZE=12
-TIMEOUT = 180
+FIELD_SIZE = 12
+TIMEOUT = 120
 
 NUM_TRIALS = 2
 MAX_SIZE = 6
@@ -37,8 +37,8 @@ trials = list(range(1,NUM_TRIALS+1))
 #trials = [1,2]
 sizes = list(range(1,MAX_SIZE+1))
 #sizes = [5]
-systems = ['popper','unconstrained','metagol','ilasp']
-#systems = ['metagol']
+# systems = ['popper','unconstrained','metagol','ilasp']
+systems = ['ilasp']
 jobs = [(system, size, trial) for size in sizes for trial in trials for system in systems]
 
 
@@ -125,9 +125,9 @@ def call_ilasp(size, trial):
         tmpfile.flush()
 
         t1 = time.time()
-        output = common.call_asp(' '.join(['ilasp', '--clingo5', '--version=2', f'-ml={size}', tmpfile.name]), timeout=TIMEOUT)
+        output = common.call_asp(' '.join(['/Users/andrew/Dropbox/code/ilasp/ILASP', '--clingo5', '--version=2', f'-ml={size}', tmpfile.name]), timeout=TIMEOUT)
         t2 = time.time()
-        
+
         prog = []
         if output != None:
             prog = list(filter(lambda line: ':-' in line, output.split('\n')))
@@ -256,9 +256,9 @@ def gen_data():
         for trial in trials:
             gen_data_(size, trial)
 
-gen_data()
+# gen_data()
 learn()
-evaluate()
-text = results()
-print(text)
-save_results(text, 'results.txt')
+# evaluate()
+# text = results()
+# print(text)
+# save_results(text, 'results.txt')

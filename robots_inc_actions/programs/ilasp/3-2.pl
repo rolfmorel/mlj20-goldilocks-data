@@ -1,2 +1,2 @@
-f(V1,V3) :- move_left(V0,V1), move_up(V0,V2), move_down(V3,V2).
-%time,26.567635536193848
+f(V0,V3) :- move_right(V0,V1), move_up(V2,V3), move_down(V2,V1).
+%time,26.482285022735596

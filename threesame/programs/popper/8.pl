@@ -1,2 +1,2 @@
-f(A) :- tail(A,D),tail(D,C),head(C,B),head(D,B).
-%time,0.2981739044189453
+f(A) :- head(A,D),tail(A,B),tail(B,C),head(C,D).
+%time,0.46102380752563477

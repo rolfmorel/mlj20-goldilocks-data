@@ -19,15 +19,16 @@ MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 4
+NUM_CPUS = 6
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-# systems = ['popper', 'unconstrained']
-systems = ['popper']
+systems = ['popper', 'unconstrained']
+# systems = ['popper']
+# systems = ['unconstrained']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -171,6 +172,8 @@ def results():
     print(x)
 
 # gen_data()
-learn()
+# learn()
 evaluate()
 results()
+
+# learn_(('popper',1))

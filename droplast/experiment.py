@@ -13,21 +13,22 @@ sys.path.append('../')
 import common
 
 TIMEOUT = 120
+# TIMEOUT = 600
 EVAL_TIMEOUT = 0.1
 NUM_TRIALS = 10
-MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
-MAX_LITERALS = 20
-NUM_CPUS = 4
+MAX_LITERALS = 30
+NUM_CPUS = 6
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-# systems = ['popper', 'unconstrained']
-systems = ['popper']
+systems = ['popper', 'unconstrained']
+# systems = ['popper']
+# systems = ['unconstrained']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -94,13 +95,8 @@ def call_popper(system, trial):
     no_pruning = True
     if system == 'popper':
         no_pruning = False
-    MODE_FILE = 'modes.pl'
-    if system == 'untyped':
-        MODE_FILE = 'modes-untyped.pl'
-    if system == 'extras':
-        MODE_FILE = 'modes-extras.pl'
     t1 = time.time()
-    (prog, context) = popper.entry_point.run_experiment(MODE_FILE, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
+    (prog, context) = popper.entry_point.run_experiment('modes.pl', BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
     t2 = time.time()
     d = f'%time,{t2-t1}'
     if prog == None or prog == False:
@@ -114,6 +110,7 @@ def learn_(args):
         prog = call_metagol(trial)
     else:
         prog = call_popper(system, trial)
+
     save_prog(prog, get_prog_file(system, trial))
 
 def learn():
@@ -169,6 +166,8 @@ def results():
     print(x)
 
 # gen_data()
-learn()
+# learn()
 evaluate()
 results()
+
+# learn_(('popper',1))

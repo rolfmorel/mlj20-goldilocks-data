@@ -1,2 +1,2 @@
-f(A,B) :- head(A,E),cons(E,A,C),cons(E,C,D),cons(E,D,B).
-%time,0.8804538249969482
+f(A,B) :- element(A,E),cons(E,A,D),cons(E,D,C),cons(E,C,B).
+%time,1.3515589237213135

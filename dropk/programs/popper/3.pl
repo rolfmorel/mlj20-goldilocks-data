@@ -1,3 +1,3 @@
-f(A,B,C) :- decrement(B,D),tail(A,E),f(E,D,C).
-f(A,B,C) :- tail(A,C),one(B).
-%time,3.5892269611358643
+f(A,B,C) :- tail(A,D),decrement(B,E),f(D,E,C).
+f(A,B,C) :- one(B),tail(A,C).
+%time,0.9401979446411133

@@ -20,9 +20,9 @@ modeb(move_up,2).
 direction(move_up,0,in).
 direction(move_up,1,out).
 
-%modeb(move_down,2).
-%direction(move_down,0,in).
-%direction(move_down,1,out).
+modeb(move_down,2).
+direction(move_down,0,in).
+direction(move_down,1,out).
 
 %modeb(pickup,2).
 %direction(pickup,0,in).

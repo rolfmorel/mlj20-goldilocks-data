@@ -20,15 +20,16 @@ BK_FILE = '../bk.pl'
 # GROUND_CONSTRAINTS = False
 GROUND_CONSTRAINTS = True
 MAX_LITERALS = 20
-NUM_CPUS = 7
+NUM_CPUS = 8
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
 systems = ['popper', 'unconstrained', 'metagol']
 # systems = ['popper']
+# systems = ['unconstrained', 'metagol']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -173,6 +174,6 @@ def results():
     print(x)
 
 # gen_data()
-#learn()
+# learn()
 evaluate()
 results()

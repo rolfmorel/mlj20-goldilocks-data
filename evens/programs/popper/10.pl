@@ -1,3 +1,3 @@
 f(A) :- empty(A).
-f(A) :- head(A,C),even(C),tail(A,B),f(B).
-%time,3.8531720638275146
+f(A) :- tail(A,C),f(C),head(A,B),even(B).
+%time,3.3383936882019043

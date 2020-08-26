@@ -30,6 +30,8 @@ my_length(A,B):-
 
 cons(A,B,C):-
     append([A],B,C).
+comps([H|T],H,T).
+
 tail([_|T],T).
 head([H|_],H).
 sum(A,B,C):-
@@ -53,6 +55,13 @@ gt(A,B):-
     \+is_list(B),
     A > B.
 
+geq(A,B):-
+    nonvar(A),
+    nonvar(B),
+    \+is_list(A),
+    \+is_list(B),
+    A >= B.
+
 even(A):-
     nonvar(A),
     \+ is_list(A),
@@ -63,10 +72,34 @@ odd(A):-
     \+ is_list(A),
     1 is A mod 2.
 
+
+%% partition(Pivot,L1,Left,Right)
+
+
+add_count(f(A),N-f(A)):-
+    length(A,N).
+add_count(f(A,B),N-f(A,B)):-
+    length(A,N).
+remove_k(_-V,V).
+
+sort_examples(L1,L2):-
+  maplist(add_count,L1,L3),
+  keysort(L3,L4),
+  maplist(remove_k,L4,L2).
+
 run:-
-    findall(A, pos(A), Pos),
-    findall(A, neg(A), Neg),
-    learn(Pos,Neg).
+    findall(A, pos(A), Pos0),
+    findall(A, neg(A), Neg0),
+    sort_examples(Pos0, Pos),
+    sort_examples(Neg0, Neg),
+    learn(Pos, Neg).
+
+
+
+%% run:-
+%%     findall(A, pos(A), Pos),
+%%     findall(A, neg(A), Neg),
+%%     learn(Pos, Neg).
 
 test:-
     forall(pos(A),test_pos(A)),
@@ -94,3 +127,7 @@ test_neg(A):-
     writeln('acc,0').
 test_neg(_):-
     writeln('acc,1').
+
+
+
+

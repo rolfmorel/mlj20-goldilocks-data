@@ -19,14 +19,16 @@ MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 7
+NUM_CPUS = 6
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-systems = ['popper', 'metagol', 'unconstrained']
+# systems = ['popper', 'metagol', 'unconstrained']
+systems = ['metagol']
+
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -91,6 +93,16 @@ def save_prog(prog, filename):
 
 def call_metagol(trial):
     load_files = ['experiment', get_train_data_file(trial)]
+    t1 = time.time()
+    prog = common.call_prolog(load_files, 'run', TIMEOUT)
+    t2 = time.time()
+    d = f'%time,{t2-t1}'
+    if prog == None:
+        return [d]
+    return [x for x in prog.split('\n') if ':-' in x] + [d]
+
+def call_metagol2(trial):
+    load_files = ['experiment2', get_train_data_file(trial)]
     t1 = time.time()
     prog = common.call_prolog(load_files, 'run', TIMEOUT)
     t2 = time.time()
@@ -173,6 +185,8 @@ def results():
     print(x)
 
 # gen_data()
-learn()
+# learn()
 evaluate()
 results()
+
+# learn_(('popper',1))

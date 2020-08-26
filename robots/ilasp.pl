@@ -1,9 +1,9 @@
 #modeh(1,f(var(state),var(state))).
-#modeb(1,f(var(state),var(state))).
-#modeb(1,move_left(var(state),var(state)), (positive)).
-#modeb(1,move_right(var(state),var(state)), (positive)).
-#modeb(1,move_up(var(state),var(state)), (positive)).
-#modeb(1,move_down(var(state),var(state)), (positive)).
+#modeb(2,f(var(state),var(state))).
+#modeb(2,move_left(var(state),var(state)), (positive)).
+#modeb(2,move_right(var(state),var(state)), (positive)).
+#modeb(2,move_up(var(state),var(state)), (positive)).
+#modeb(2,move_down(var(state),var(state)), (positive)).
 
 #maxv(4).
 

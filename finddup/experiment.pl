@@ -40,10 +40,11 @@ body_pred(P/A):-
 body_pred(element,2).
 body_pred(tail,2).
 body_pred(head,2).
-body_pred(increment,2).
+%% body_pred(increment,2).
 body_pred(decrement,2).
-body_pred(gt,2).
+body_pred(geq,2).
 body_pred(empty,1).
 body_pred(zero,1).
+body_pred(one,1).
 body_pred(even,1).
 body_pred(odd,1).

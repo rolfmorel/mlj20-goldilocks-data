@@ -15,21 +15,22 @@ import popper.entry_point
 from popper.test.datalog import Test
 from popper.util.data_types import Result
 
+ILASP = '/Users/andrew/Dropbox/code/ilasp/ILASP'
 
 sys.path.append('../')
 import common
 
-NUM_CPUS = 3
+NUM_CPUS = 8
 
 NUM_TRIALS = 10
 
 NUM_TRAIN_EXAMPLES = 5  # both this number of positive as well as negative examples
 NUM_TEST_EXAMPLES = 1000
 
-TIMEOUT = 600
+TIMEOUT = 120
 
 MIN_SIZE = 4
-MAX_SIZE = 20
+MAX_SIZE = 30
 
 EVAL_TIMEOUT = 0.01
 
@@ -39,8 +40,18 @@ GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
 
 trials = list(range(1,NUM_TRIALS+1))
+# trials = [1]
 sizes = list(range(MIN_SIZE, MAX_SIZE + 1, 2))
-systems = ['popper-prolog','popper-datalog','unconstrained-prolog','unconstrained-datalog','metagol','ilasp']
+# sizes = [22,24,26,28,30]
+# systems = ['popper-prolog','unconstrained-prolog','metagol','ilasp']
+# DONE
+# systems = ['popper-prolog']
+# systems = ['popper-datalog']
+# systems = ['unconstrained-prolog','unconstrained-datalog']
+# systems = ['metagol']
+# TODO
+systems = ['ilasp']
+
 
 #systems = ['ilasp']
 #sizes = [14,16]
@@ -147,9 +158,33 @@ def call_ilasp(size, trial):
         tmpfile.flush()
 
         t1 = time.time()
-        output = common.call_asp(' '.join(['ilasp', 
+        output = common.call_asp(' '.join([ILASP,
             '--clingo5', '--version=2', #'-s',
             '-ml=2', '--max-rule-length=3',
+            '--no-constraints', '--no-aggregates',
+            tmpfile.name]), timeout=TIMEOUT)
+        t2 = time.time()
+
+        prog = []
+        if output != None:
+            prog = list(filter(lambda line: ':-' in line, output.split('\n')))
+        d = f'%time,{t2-t1}'
+
+        return prog + [d]
+
+def call_ilasp3(size, trial):
+    with NamedTemporaryFile('w') as tmpfile, \
+         open(get_train_data_file(size, trial, ilasp=True)) as data_file, \
+         open('ilasp.pl') as bk_file:
+        for line in (data_file.readlines() + bk_file.readlines()):
+            tmpfile.write(line)
+        tmpfile.flush()
+
+        t1 = time.time()
+        output = common.call_asp(' '.join([ILASP,
+            '--clingo5', '--version=3', #'-s',
+            '-ml=2', '--max-rule-length=3',
+            '-np', '-ni',
             '--no-constraints', '--no-aggregates',
             tmpfile.name]), timeout=TIMEOUT)
         t2 = time.time()
@@ -188,7 +223,7 @@ def call_popper(system, size, trial):
         t1 = time.time()
         (prog, context) = popper.entry_point.run_experiment('modes.pl',
                 tmp_bk.name, get_train_data_file(size, trial), MAX_LITERALS, EVAL_TIMEOUT,
-                GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True, tester=tester)
+                GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False, tester=tester)
         t2 = time.time()
 
         d = f'%time,{t2-t1}'
@@ -203,6 +238,8 @@ def learn_(args):
         prog = call_metagol(size, trial)
     elif system == 'ilasp':
         prog = call_ilasp(size, trial)
+    elif system == 'ilasp3':
+        prog = call_ilasp3(size, trial)
     else:
         prog = call_popper(system, size, trial)
     save_prog(prog, get_prog_file(system, size, trial))
@@ -273,7 +310,7 @@ def gen_data():
         for trial in trials:
             gen_data_(size, trial)
 
-gen_data()
+# gen_data()
 learn()
 evaluate()
 text = results()

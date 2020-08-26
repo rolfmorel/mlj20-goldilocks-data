@@ -19,15 +19,15 @@ MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 10
-NUM_CPUS = 6
+NUM_CPUS = 1
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-# systems = ['popper', 'metagol', 'unconstrained']
-systems = ['metagol']
+# systems = ['popper', 'metagol','unconstrained']
+systems = ['popper']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -96,7 +96,7 @@ def call_popper(system, trial):
     if system == 'popper':
         no_pruning = False
     t1 = time.time()
-    (prog, context) = popper.entry_point.run_experiment('modes.pl', BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=True)
+    (prog, context) = popper.entry_point.run_experiment('modes.pl', BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
     t2 = time.time()
     d = f'%time,{t2-t1}'
     if prog == None or prog == False:
@@ -168,6 +168,7 @@ def results():
 
 # gen_data()
 # learn()
-# evaluate()
-# results()
-learn_(('metagol',1))
+evaluate()
+results()
+# learn_(('popper',1))
+# learn_(('metagol',1))

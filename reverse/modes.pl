@@ -2,23 +2,28 @@ max_vars(5).
 max_body(5).
 max_clauses(2).
 
+%% reverse(A,B):-
+%%     empty(A),
+%%     empty(B).
+%% reverse(A,B):-
+%%     tail(A,C),
+%%     reverse(C,D),
+%%     head(A,E),
+%%     cons(E,D,B).
 
-%% reverse(A,B):-tail(A,C),empty(C),head(A,D),cons(D,C,B).
-%% reverse(A,B):-tail(A,C),reverse(C,D),head(A,E),cons(E,D,B).
 
-%% reverse(A,B):-cons(C,D,A),empty(D),cons(C,D,B).
-%% reverse(A,B):-cons(C,D,A),reverse(D,E),cons(C,D,B).
-
-functional(tail,2).
 functional(head,2).
+functional(tail,2).
 functional(increment,2).
 functional(decrement,2).
+functional(geq,2).
 functional(cons,3).
 
-irreflexive(tail,2).
 irreflexive(head,2).
+irreflexive(tail,2).
 irreflexive(increment,2).
 irreflexive(decrement,2).
+irreflexive(geq,2).
 
 modeh(f,2).
 type(f,0,list).
@@ -39,15 +44,7 @@ type(tail,1,list).
 direction(tail,0,in).
 direction(tail,1,out).
 
-%% modeb(sum,3).
-type(sum,0,int).
-type(sum,1,int).
-type(sum,2,int).
-direction(sum,0,in).
-direction(sum,1,in).
-direction(sum,2,out).
-
-%% modeb(cons,3).
+modeb(cons,3).
 type(cons,0,element).
 type(cons,1,list).
 type(cons,2,list).
@@ -55,7 +52,7 @@ direction(cons,0,in).
 direction(cons,1,in).
 direction(cons,2,out).
 
-%% modeb(decrement,2).
+modeb(decrement,2).
 type(decrement,0,int).
 type(decrement,1,int).
 direction(decrement,0,in).
@@ -67,24 +64,32 @@ type(increment,1,int).
 direction(increment,0,in).
 direction(increment,1,out).
 
-%% modeb(gt,2).
-type(gt,0,int).
-type(gt,1,int).
-direction(gt,0,in).
-direction(gt,1,out).
+modeb(geq,2).
+type(geq,0,element).
+type(geq,1,element).
+direction(geq,0,in).
+direction(geq,1,in).
 
 modeb(empty,1).
 type(empty,0,list).
 direction(empty,0,in).
 
-%% modeb(zero,1).
-type(zero,0,element).
+modeb(empty_out,1).
+type(empty_out,0,list).
+direction(empty_out,0,out).
+
+modeb(zero,1).
+type(zero,0,int).
 direction(zero,0,in).
 
-%% modeb(even,1).
+modeb(one,1).
+type(one,0,int).
+direction(one,0,in).
+
+modeb(even,1).
 type(even,0,element).
 direction(even,0,in).
 
-%% modeb(one,1).
-type(one,0,int).
-direction(one,0,in).
+modeb(odd,1).
+type(odd,0,element).
+direction(odd,0,in).

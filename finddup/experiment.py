@@ -19,10 +19,10 @@ MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 4
+NUM_CPUS = 2
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
@@ -99,12 +99,23 @@ def call_metagol(trial):
         return [d]
     return [x for x in prog.split('\n') if ':-' in x] + [d]
 
+def call_metagol2(trial):
+    load_files = ['experiment2', get_train_data_file(trial)]
+    t1 = time.time()
+    prog = common.call_prolog(load_files, 'run', TIMEOUT)
+    t2 = time.time()
+    d = f'%time,{t2-t1}'
+    if prog == None:
+        return [d]
+    return [x for x in prog.split('\n') if ':-' in x] + [d]
+
 def call_popper(system, trial):
     no_pruning = True
-    if system == 'popper':
+    if 'popper' in system:
         no_pruning = False
     t1 = time.time()
-    (prog, context) = popper.entry_point.run_experiment('modes.pl', BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
+    modes = 'modes.pl'
+    (prog, context) = popper.entry_point.run_experiment(modes, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
     t2 = time.time()
     d = f'%time,{t2-t1}'
     if prog == None or prog == False:
@@ -176,3 +187,5 @@ def results():
 learn()
 evaluate()
 results()
+
+# learn_(('metagol2',1))

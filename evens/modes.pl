@@ -39,11 +39,17 @@ type(tail,1,list).
 direction(tail,0,in).
 direction(tail,1,out).
 
-modeb(increment,2).
-type(increment,0,int).
-type(increment,1,int).
-direction(increment,0,in).
-direction(increment,1,out).
+%% modeb(element,2).
+%% type(element,0,list).
+%% type(element,1,element).
+%% direction(element,0,in).
+%% direction(element,1,out).
+
+%% modeb(increment,2).
+%% type(increment,0,int).
+%% type(increment,1,int).
+%% direction(increment,0,in).
+%% direction(increment,1,out).
 
 modeb(decrement,2).
 type(decrement,0,int).
@@ -51,19 +57,23 @@ type(decrement,1,int).
 direction(decrement,0,in).
 direction(decrement,1,out).
 
-modeb(gt,2).
-type(gt,0,int).
-type(gt,1,int).
-direction(gt,0,in).
-direction(gt,1,out).
+modeb(geq,2).
+type(geq,0,int).
+type(geq,1,int).
+direction(geq,0,in).
+direction(geq,1,int).
 
 modeb(empty,1).
 type(empty,0,list).
 direction(empty,0,in).
 
 modeb(zero,1).
-type(zero,0,element).
+type(zero,0,int).
 direction(zero,0,in).
+
+modeb(one,1).
+type(one,0,int).
+direction(one,0,in).
 
 modeb(even,1).
 type(even,0,element).

@@ -24,11 +24,13 @@ MAX_LITERALS = 20
 NUM_CPUS = 6
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 20
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
 systems = ['popper', 'unconstrained']
+# systems = ['popper']
+# systems = ['popper-extra']
 jobs = [(system, trial) for trial in trials for system in systems]
 
 def get_train_data_file(trial):
@@ -44,11 +46,8 @@ def get_results_file(system, trial):
     return f'results/{system}/{trial}.pl'
 
 def add_last(xs):
-    # %% add the last element to the head
-    # return [xs[0]] + xs
-    # return [xs[0],xs[0]] + xs
+    # add the last element to the head
     return [xs[0],xs[0],xs[0]] + xs
-    # return [xs[0],xs[0],xs[0],xs[0]] + xs
 
 def gen_list():
     n = random.randint(1, MAX_LIST_SIZE+1)
@@ -96,14 +95,12 @@ def call_metagol(trial):
     return [x for x in prog.split('\n') if ':-' in x] + [d]
 
 def call_popper(system, trial):
-    no_pruning = True
-    if system == 'popper':
-        no_pruning = False
+    no_pruning = False
+    if system == 'unconstrained':
+        no_pruning = True
     MODE_FILE = 'modes.pl'
-    if system == 'untyped':
-        MODE_FILE = 'modes-untyped.pl'
-    if system == 'extras':
-        MODE_FILE = 'modes-extras.pl'
+    # if system == 'popper-extra':
+    #     MODE_FILE = 'modes-extra.pl'
     t1 = time.time()
     (prog, context) = popper.entry_point.run_experiment(MODE_FILE, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
     t2 = time.time()
@@ -181,5 +178,5 @@ def results():
 
 # gen_data()
 # learn()
-# evaluate()
+evaluate()
 results()
