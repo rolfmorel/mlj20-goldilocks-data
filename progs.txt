@@ -1,0 +1,266 @@
+addone(A,B):-
+    comps(A,C,D),
+    empty(D),
+    decrement(C,E),
+    cons(E,D,B).
+addone(A,B):-
+    comps(A,C,D),
+    addone(D,E),
+    decrement(C,F),
+    cons(F,E,B).
+
+##################################################
+
+dropk(A,B,C):-
+    one(B),
+    tail(A,C).
+dropk(A,B,C):-
+    tail(A,D),
+    decrement(B,E),
+    dropk(D,E,B).
+
+##################################################
+
+droplast(A,B):-
+    tail(A,B),
+    tail(B,C),
+    empty(C).
+droplast(A,B):-
+    tail(A,C),
+    droplast(C,D),
+    head(A,E),
+    head(B,E),
+    tail(B,D).
+
+droplast(A,B):-
+    tail(A,B),
+    tail(B,C),
+    empty(C).
+droplast(A,B):-
+    tail(A,C),
+    droplast(C,D),
+    head(A,E),
+    cons(E,D,B).
+
+droplast(A,B):-
+    tail(A,B),
+    tail(B,C),
+    empty(C).
+droplast(A,B):-
+    comps(A,C,D),
+    droplast(D,E),
+    cons(C,E,B).
+
+##################################################
+
+evens(A):-
+    empty(A).
+evens(A):-
+    even(A),
+    tail(A,C),
+    evens(C).
+
+
+##################################################
+
+binary(A):-
+    empty(A).
+binary(A):-
+    one(A),
+    tail(A,C),
+    binary(C).
+binary(A):-
+    zero(A),
+    tail(A,C),
+    binary(C).
+
+##################################################
+
+##################################################
+
+finddup(A,B):-
+    head(A,B),
+    tail(A,C),
+    member(B,C).
+finddup(A,B):-
+    tail(A,C),
+    finddup(C,B).
+
+finddup(A,B):-
+    comps(A,B,C),
+    element(C,B).
+finddup(A,B):-
+    tail(A,C),
+    finddup(C,B).
+
+##################################################
+
+last(A,B):-
+    tail(A,C),
+    empty(C),
+    head(A,B).
+last(A,B):-
+    tail(A,C),
+    last(C,B).
+
+last(A,B):-
+    comps(A,B,C)
+    empty(C).
+last(A,B):-
+    tail(A,C),
+    last(C,B).
+
+##################################################
+
+len(A,B):-
+    empty(A),
+    zero(B).
+len(A,B):-
+    tail(A,C),
+    len(C,D),
+    succ(D,B).
+
+##################################################
+
+sumlist(A,B):-
+    tail(A,C),
+    empty(C),
+    head(A,B).
+sumlist(A,B):-
+    tail(A,C),
+    f(C,D),
+    head(A,E),
+    sum(D,E,B).
+
+##################################################
+
+member(A,B):-
+    head(A,B).
+member(A,B):-
+    tail(A,C),
+    member(C,B).
+
+##################################################
+
+sorted(A):-
+    empty(A).
+sorted(A):-
+    head(A,B),
+    tail(A,C),
+    head(C,D),
+    gt(D,B),
+    sorted(C).
+
+sorted(A):-
+    empty(A).
+sorted(A):-
+    comps(A,B,C),
+    head(C,D),
+    gt(B,D),
+    sorted(C).
+
+##################################################
+
+duplicate(A,B):-
+    comps(A,C,D),
+    empty(D),
+    cons(C,A,B).
+duplicate(A,B):-
+    comps(A,C,D),
+    duplicate(D,E),
+    cons(A,E,B).
+
+##################################################
+
+threesame(A):-
+    head(A,B),
+    tail(A,C),
+    head(C,B),
+    tail(C,D),
+    head(D,B).
+
+threesame(A):-
+    comps(A,B,C),
+    comps(C,B,E),
+    head(E,B).
+
+##################################################
+
+subset(A,B):-
+    head(A,)
+
+##################################################
+
+if even length drop 1
+if odd length drop 2
+
+f(A,B):-
+    head(A,C),
+    one(C),
+    tail(A,B).
+f(A,B):-
+    head(A,C),
+    two(C),
+    tail(A,C),
+    tail(C,B).
+
+====
+f(A,B):-f1(A),tail(A,B).
+f1(A):-head(A,B),one(B).
+f(A,B):-f2(A),f3(A,B).
+f2(A):-head(A,B),two(B).
+f3(A,B):-tail(A,C),tail(C,B).
+f(A,B):-f4(A),f5(A,B).
+f4(A):-head(A,B),two(B).
+f5(A,B):-tail(A,C),f3(C,B).
+
+f(A,B):-
+    length(A,N),
+    even(N),
+    tail(A,B).
+f(A,B):-
+    length(A,N),
+    odd(N),
+    tail(A,C),
+    tail(C,D).
+
+##################################################
+
+switch(A,B):-
+    tail(A,C),
+    tail(C,D),
+    head(A,E),
+    cons(E,D,F),
+    head(C,G),
+    cons(G,F,B).
+
+switch(A,B):-
+    comps(A,C,D),
+    comps(D,E,F),
+    cons(C,F,G),
+    cons(D,G,B).
+
+
+##################################################
+
+qsort(A,B):-
+    empty(A),
+    empty(B).
+qsort(A,B):-
+    head(A,C),
+    partition(C,A,D,E),
+    qsort(D,F),
+    qsort(E,G),
+    append(F,G,B).
+
+
+msort(A,A):-
+    empty(A).
+msort(A,A):-
+    tail(A,B),
+    empty(B).
+msort(A,B):-
+    split(A,C,D),
+    msort(C,E),
+    msort(D,F),
+    merge(E,F,B).

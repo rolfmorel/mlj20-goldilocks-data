@@ -175,5 +175,5 @@ def results():
 
 # gen_data()
 # learn()
-evaluate()
+# evaluate()
 results()
