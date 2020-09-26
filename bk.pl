@@ -1,14 +1,20 @@
-%% head(A,C),
-%% cons(C,A,B).
-%% empty(A) (in)
-%% even(B) (in)
-%% tail(A,C)
-%% one (in)
-%% decrement(B,E),
-%% zero (out)
-%% increment(D,B).
-%% gt
-%% sum
+%% SAME AS POPPER
+body_pred(head/2).
+body_pred(tail/2).
+body_pred(geq/2).
+body_pred(empty/1).
+body_pred(even/1).
+body_pred(odd/1).
+body_pred(one/1).
+body_pred(zero/1).
+body_pred(decrement/2).
+
+%% FOR METAGOL
+body_pred(P/A):-
+    current_predicate(modeb/2),
+    modeb(P,A).
+
+%% body_pred(P/A)
 
 is_list([]).
 is_list([_|_]).
@@ -127,7 +133,3 @@ test_neg(A):-
     writeln('acc,0').
 test_neg(_):-
     writeln('acc,1').
-
-
-
-

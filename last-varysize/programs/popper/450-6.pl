@@ -1,3 +1,3 @@
-f(A,B) :- tail(A,C),empty(C),head(A,B).
+f(A,B) :- head(A,B),tail(A,C),empty(C).
 f(A,B) :- tail(A,C),f(C,B).
-%time,2.7789859771728516
+%time,0.7295377254486084

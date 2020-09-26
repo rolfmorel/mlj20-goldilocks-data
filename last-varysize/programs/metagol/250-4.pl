@@ -1,4 +1,1 @@
-f(A,B):-tail(A,C),f(C,B).
-f(A,B):-f_1(A),head(A,B).
-f_1(A):-tail(A,B),empty(B).
-%time,95.85817813873291
+%time,60.00326204299927

@@ -1,3 +1,7 @@
-f(A,B,C) :- tail(A,D),decrement(B,E),f(D,E,C).
 f(A,B,C) :- one(B),tail(A,C).
-%time,0.8729422092437744
+f(A,B,C) :- decrement(B,E),tail(A,D),f(D,E,C).
+%NUMPROGS: 23
+%TIME: 0.2505768241826445
+%SOLVING: 0.0855942228808999
+%GROUNDING: 0.06097570946440101
+

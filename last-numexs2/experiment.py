@@ -12,25 +12,30 @@ import scipy.stats as stats
 sys.path.append('../')
 import common
 
-TIMEOUT = 120
+TIMEOUT = 60
 EVAL_TIMEOUT = 0.01
 NUM_TRIALS = 10
-MODES_FILE = 'modes.pl'
+# MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 6
 # NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
-MAX_LIST_SIZE = 100
+MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
-trials = list(range(1,NUM_TRIALS+1))
-trials = list(range(1,11))
-# trials = [4,5,6,7,8,9,10]
-# systems = ['popper']
-systems = ['popper','metagol']
-sizes = [3**n for n in range(1,11)]
+# trials = list(range(1,NUM_TRIALS+1))
+# trials = list(range(1,11))
+trials = [1,2,3,4,5]
+# systems = ['popper','metagol']
+systems = ['popper']
+# systems = ['metagol']
+# sizes = [10**n for n in range(1,6)]
+
+# sizes = [10000] FINE WITH POPPER + METAGOL TIMES OUT
+# sizes = [8000]
+# sizes = [1000,3000,5000,7000,9000]
+sizes = list(range(1000,11000, 1000))
 
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
@@ -127,7 +132,8 @@ def learn_(args):
     save_prog(prog, get_prog_file(system, size, trial))
 
 def learn():
-    list(common.parmap(learn_, jobs, NUM_CPUS))
+    # list(map(learn_, jobs))
+    list(common.parmap(learn_, jobs))
 
 def test_(args):
     (system, size, trial) = args
@@ -137,7 +143,7 @@ def test_(args):
             f.write(res)
 
 def evaluate():
-    list(common.parmap(test_, jobs, NUM_CPUS))
+    list(common.parmap(test_, jobs))
 
 def get_accs_(system, size, trial):
     with open(get_results_file(system, size, trial), 'r') as f:
@@ -188,8 +194,6 @@ def results():
 
 
 # gen_data()
-# learn()
-# evaluate()
+learn()
+evaluate()
 results()
-
-# learn_(('popper',1))

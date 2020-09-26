@@ -1,2 +1,6 @@
-f(A,B) :- element(A,E),cons(E,A,D),cons(E,D,C),cons(E,C,B).
-%time,1.1546671390533447
+f(A,B) :- head(A,E),cons(E,A,C),cons(E,C,D),cons(E,D,B).
+%NUMPROGS: 20
+%TIME: 0.49079088610596955
+%SOLVING: 0.2623720800038427
+%GROUNDING: 0.061418573604896665
+

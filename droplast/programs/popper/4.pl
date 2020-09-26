@@ -1,3 +1,7 @@
-f(A,B) :- head(A,E),tail(A,D),f(D,C),cons(E,C,B).
 f(A,B) :- tail(A,B).
-%time,51.49015021324158
+f(A,B) :- tail(A,C),head(A,E),f(C,D),cons(E,D,B).
+%NUMPROGS: 129
+%TIME: 14.423251077067107
+%SOLVING: 11.761088942876086
+%GROUNDING: 0.36652537528425455
+

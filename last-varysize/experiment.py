@@ -12,8 +12,8 @@ import scipy.stats as stats
 sys.path.append('../')
 import common
 
-TIMEOUT = 120
-EVAL_TIMEOUT = 0.1
+TIMEOUT = 60
+EVAL_TIMEOUT = 0.01
 NUM_TRIALS = 10
 MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
@@ -128,7 +128,7 @@ def learn_(args):
     save_prog(prog, get_prog_file(system, size, trial))
 
 def learn():
-    list(common.parmap(learn_, jobs, NUM_CPUS))
+    list(common.parmap(learn_, jobs))
 
 def test_(args):
     (system, size, trial) = args
@@ -138,7 +138,7 @@ def test_(args):
             f.write(res)
 
 def evaluate():
-    list(common.parmap(test_, jobs, NUM_CPUS))
+    list(common.parmap(test_, jobs))
 
 def get_accs_(system, size, trial):
     with open(get_results_file(system, size, trial), 'r') as f:

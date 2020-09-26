@@ -1,1 +1,7 @@
-%time,120.3371651172638
+f(A) :- tail(A,B),empty(B).
+f(A) :- head(A,B),tail(A,D),head(D,C),geq(C,B),f(D).
+%NUMPROGS: 2006
+%TIME: 155.93639556504786
+%SOLVING: 73.79869634984061
+%GROUNDING: 74.38029434415512
+

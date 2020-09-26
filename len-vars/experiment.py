@@ -13,25 +13,23 @@ import scipy.stats as stats
 sys.path.append('../')
 import common
 
-TIMEOUT = 120
-EVAL_TIMEOUT = 0.1
+TIMEOUT = 60
+EVAL_TIMEOUT = 0.01
 NUM_TRIALS = 10
-MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
-NUM_CPUS = 6
+NUM_CPUS = 10
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
 MAX_LIST_SIZE = 50
 MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
-# trials = [3,4,5,6,7,8,9,10]
+# trials = [1]
 systems = ['popper']
-sizes = list(range(4,13))
+sizes = list(range(4,14))
 # sizes = [12]
-# sizes = list(range(4,12))
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
 def get_train_data_file(trial):
@@ -73,12 +71,12 @@ def gen_data_(trial):
             f.write(f'pos(f({x},{y})).\n')
         for (x, y) in gen_neg_examples(NUM_TRAIN_EXAMPLES):
             f.write(f'neg(f({x},{y})).\n')
-    # test data
-    with open(get_test_data_file(trial), 'w') as f:
-        for (x, y) in gen_pos_examples(NUM_TEST_EXAMPLES):
-            f.write(f'pos(f({x},{y})).\n')
-        for (x, y) in gen_neg_examples(NUM_TEST_EXAMPLES):
-            f.write(f'neg(f({x},{y})).\n')
+    # # test data
+    # with open(get_test_data_file(trial), 'w') as f:
+    #     for (x, y) in gen_pos_examples(NUM_TEST_EXAMPLES):
+    #         f.write(f'pos(f({x},{y})).\n')
+    #     for (x, y) in gen_neg_examples(NUM_TEST_EXAMPLES):
+    #         f.write(f'neg(f({x},{y})).\n')
 
 def gen_data():
     for trial in trials:
@@ -90,19 +88,18 @@ def save_prog(prog, filename):
 
 def call_popper(size, trial):
     no_pruning = False
-    t1 = time.time()
-    # MAKE TEMP FILE
-
     with NamedTemporaryFile('w') as tmpfile:
-        with open('modes.pl') as f:
-            for line in f:
-                tmpfile.write(line + '\n')
+        tmpfile.write(open('modes.pl').read() + '\n')
         tmpfile.write(f'max_vars({size}).\n')
         tmpfile.flush()
 
-        (prog, context) = popper.entry_point.run_experiment(tmpfile.name, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
+        t1 = time.time()
+        (prog, context) = popper.entry_point.run_experiment(tmpfile.name, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, timeout=TIMEOUT, debug=False)
         t2 = time.time()
-        d = f'%time,{t2-t1}'
+        d = t2-t1
+        if d > TIMEOUT:
+            d = TIMEOUT
+        d = f'%time,{d}'
         if prog == None or prog == False:
             return [d]
         return prog + [d]
@@ -114,26 +111,6 @@ def learn_(args):
 
 def learn():
     list(common.parmap(learn_, jobs, NUM_CPUS))
-
-def test_(args):
-    (system, size, trial) = args
-    with open(get_results_file(system, size, trial), 'w') as f:
-        res = common.call_prolog([BK_FILE, get_test_data_file(trial), get_prog_file(system, size, trial)], 'test')
-        if res != None:
-            f.write(res)
-
-def evaluate():
-    list(common.parmap(test_, jobs, NUM_CPUS))
-
-def get_accs_(system, size, trial):
-    with open(get_results_file(system, size, trial), 'r') as f:
-        return [int(line.split(',')[1]) for line in f if line.startswith('acc')]
-
-def get_accs(system, size):
-    accs = []
-    for trial in trials:
-        accs.append(np.mean(get_accs_(system, size, trial)))
-    return int(np.mean(accs)*100), int(stats.sem(accs)*100)
 
 def get_times_(system, size, trial):
     prog_file = get_prog_file(system, size, trial)
@@ -150,42 +127,15 @@ def get_times(system, size):
     return round(np.mean(times),2), round(stats.sem(times),2)
 
 def results():
-    # x = 'Len'
-    # for system in systems:
-    #     for size in sizes:
-    #         acc,err = get_accs(system, size)
-    #         print(acc,err)
-        # x += f' & {acc} $\pm$ {err}'
-    # x+= ' \\\\'
-    # print(x)
-
-    # x = 'Len'
-
     xs = []
     ys = []
 
     for system in systems:
+        print('size time error')
         for size in sizes:
             time,err = get_times(system, size)
-            # print(size, time, err)
-            xs.append(time)
-
-    for i in range(1,len(xs)):
-        y = xs[i] - xs[i-1]
-        print(xs[i]/xs[i-1])
-        # ys.append(y)
-
-    # print('--')
-    # for i in range(1, len(ys)):
-    #     z = ys[i] - ys[i-1]
-    #     print(z)
-    #     x += f' & {time} $\pm$ {err}'
-    # x+= ' \\\\'
-    # print(x)
+            print(size, time, err)
 
 # gen_data()
 # learn()
-# evaluate()
 results()
-
-# learn_(('popper',1))

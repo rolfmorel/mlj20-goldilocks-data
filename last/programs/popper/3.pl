@@ -1,3 +1,7 @@
+f(A,B) :- head(A,B),tail(A,C),empty(C).
 f(A,B) :- tail(A,C),f(C,B).
-f(A,B) :- tail(A,C),empty(C),head(A,B).
-%time,0.5258529186248779
+%NUMPROGS: 10
+%TIME: 0.19357303180731833
+%SOLVING: 0.09306971123442054
+%GROUNDING: 0.016723471460863948
+

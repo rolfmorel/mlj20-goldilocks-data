@@ -13,8 +13,8 @@ import scipy.stats as stats
 sys.path.append('../')
 import common
 
-TIMEOUT = 120
-EVAL_TIMEOUT = 0.1
+TIMEOUT = 60
+EVAL_TIMEOUT = 0.01
 NUM_TRIALS = 10
 MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
@@ -28,8 +28,9 @@ MAX_ELEMENT = 100
 
 trials = list(range(1,NUM_TRIALS+1))
 # trials = list(range(3,NUM_TRIALS+1))
+trials = [1,2,3,4,5]
 systems = ['popper']
-sizes = [10,20,30,40,50]
+sizes = [10,20,30,40,50,60]
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
 def get_train_data_file(trial):
@@ -100,7 +101,10 @@ def call_popper(size, trial):
 
         (prog, context) = popper.entry_point.run_experiment(tmpfile.name, BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=False)
         t2 = time.time()
-        d = f'%time,{t2-t1}'
+        d = t2-t1
+        if d > TIMEOUT:
+            d = TIMEOUT
+        d = f'%time,{d}'
         if prog == None or prog == False:
             return [d]
         return prog + [d]
@@ -167,6 +171,6 @@ def results():
     # print(x)
 
 # gen_data()
-# learn()
-evaluate()
+learn()
+# evaluate()
 results()

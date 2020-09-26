@@ -1,3 +1,7 @@
-f(A) :- tail(A,B),head(A,C),even(C),f(B).
 f(A) :- empty(A).
-%time,2.706892967224121
+f(A) :- tail(A,B),head(A,C),even(C),f(B).
+%NUMPROGS: 79
+%TIME: 0.8116450950037688
+%SOLVING: 0.4272695614490658
+%GROUNDING: 0.17593502579256892
+

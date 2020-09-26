@@ -1,3 +1,7 @@
-f(A,B) :- tail(A,D),f(D,C),increment(C,B).
-f(A,B) :- empty(A),zero(B).
-%time,8.1266610622406
+f(A,B) :- zero(B),empty(A).
+f(A,B) :- tail(A,C),f(C,D),increment(D,B).
+%NUMPROGS: 92
+%TIME: 1.111095504136756
+%SOLVING: 0.6562055835966021
+%GROUNDING: 0.22611801372841
+

@@ -13,14 +13,14 @@ import scipy.stats as stats
 sys.path.append('../')
 import common
 
-TIMEOUT = 120
-EVAL_TIMEOUT = 0.1
+TIMEOUT = 60
+EVAL_TIMEOUT = 0.01
 NUM_TRIALS = 10
 MODES_FILE = 'modes.pl'
 BK_FILE = '../bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 100
-NUM_CPUS = 4
+NUM_CPUS = 10
 NUM_TRAIN_EXAMPLES = 10
 NUM_TEST_EXAMPLES = 1000
 MAX_LIST_SIZE = 50
@@ -29,7 +29,7 @@ MAX_ELEMENT = 100
 trials = list(range(1,NUM_TRIALS+1))
 # trials = list(range(3,11))
 systems = ['popper']
-sizes = [10,20,30,40,50]
+sizes = [20,40,60,80,100]
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
 def get_train_data_file(trial):
@@ -148,25 +148,13 @@ def get_times(system, size):
     return round(np.mean(times),2), round(stats.sem(times),2)
 
 def results():
-    # x = 'Len'
-    # for system in systems:
-    #     for size in sizes:
-    #         acc,err = get_accs(system, size)
-    #         print(acc,err)
-        # x += f' & {acc} $\pm$ {err}'
-    # x+= ' \\\\'
-    # print(x)
-
-    # x = 'Len'
     for system in systems:
         for size in sizes:
             time,err = get_times(system, size)
             print(size, time, err)
-    #     x += f' & {time} $\pm$ {err}'
-    # x+= ' \\\\'
-    # print(x)
+
 
 # gen_data()
 learn()
-evaluate()
+# evaluate()
 results()

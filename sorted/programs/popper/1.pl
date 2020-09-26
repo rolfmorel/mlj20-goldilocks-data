@@ -1,3 +1,7 @@
-f(A) :- head(A,C),tail(A,D),head(D,B),geq(B,C),f(D).
 f(A) :- tail(A,B),empty(B).
-%time,55.77049016952515
+f(A) :- tail(A,D),head(A,B),head(D,C),geq(C,B),f(D).
+%NUMPROGS: 181
+%TIME: 4.609467742033303
+%SOLVING: 3.54790254868567
+%GROUNDING: 0.650966610526666
+
