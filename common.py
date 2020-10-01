@@ -10,8 +10,8 @@ import numpy as np
 import scipy.stats as stats
 from tempfile import NamedTemporaryFile
 
+# NUM_CPUS = 1
 NUM_CPUS = 14
-# NUM_CPUS = 7
 TIMEOUT = 300
 EVAL_TIMEOUT = 0.01
 # NUM_TRIALS = 10
@@ -117,23 +117,6 @@ def call_metagol(trial):
     return [x for x in prog.split('\n') if ':-' in x] + [d]
 
 def call_aleph(trial):
-    # with NamedTemporaryFile('w') as tmpfile:
-    #     with open(get_aleph_modes()) as f:
-    #         for line in f.readlines():
-    #             tmpfile.write(line)
-    #     tmpfile.write('\n')
-    #     tmpfile.write(':-begin_bg.\n')
-    #     with open(BK_FILE) as f:
-    #         for line in f.readlines():
-    #             tmpfile.write(line)
-    #     tmpfile.write('\n')
-    #     tmpfile.write(':-end_bg.\n')
-    #     with open(get_train_data_file(size, trial, aleph=True)) as f:
-    #         for line in f.readlines():
-    #             tmpfile.write(line)
-    #     tmpfile.write('\n')
-    #     tmpfile.flush()
-
     load_files = [get_train_data_file(trial, aleph=True)]
     cmd = "induce(P),writeln('<PROG>'),numbervars(P,0,_),foreach(member(C,P),(write(C),write('.\n'))),writeln('</PROG>'),halt"
     t1 = time.time()
@@ -142,7 +125,7 @@ def call_aleph(trial):
     d = fix_times(t1, t2)
     if prog == None:
         return [d]
-    if 'PROG' not in prog:
+    if '<PROG>' not in prog:
         return [d]
     return [x for x in prog.split('<PROG>')[1].split('</PROG>')[0].split('\n')] + [d]
 

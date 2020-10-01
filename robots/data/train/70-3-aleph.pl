@@ -10,6 +10,8 @@
 :- aleph_set(nodes,50000).
 
 :- modeh(*,f(+state,-state)).
+:- modeb(*,f(+state,-state)).
+
 :- modeb(*,move_up(+state,-state)).
 :- modeb(*,move_down(+state,-state)).
 :- modeb(*,move_left(+state,-state)).
@@ -27,6 +29,9 @@
 :- determination(f/2,at_bottom/1).
 :- determination(f/2,at_left/1).
 :- determination(f/2,at_right/1).
+:- determination(f/2,f/2).
+
+
 :-begin_bg.
 size(70).
 :- use_module(library(clpfd)).
@@ -41,22 +46,27 @@ at_right(w(X,_)):-
     size(X).
 
 move_right(w(X1,Y),w(X2,Y)):-
+nonvar(X1),
+
     size(Size),
-    X1 #< Size,
-    X2 #= X1 + 1.
+    X1 < Size,
+    X2  is  X1 + 1.
 
 move_left(w(X1,Y),w(X2,Y)):-
-    X1 #> 1,
-    X2 #= X1 - 1.
+	nonvar(X1),
+    X1 > 1,
+    X2  is  X1 - 1.
 
 move_up(w(X,Y1),w(X,Y2)):-
+	nonvar(Y1),
     size(Size),
-    Y1 #< Size,
-    Y2 #= Y1 + 1.
+    Y1 < Size,
+    Y2  is  Y1 + 1.
 
 move_down(w(X,Y1),w(X,Y2)):-
-    Y1 #> 1,
-    Y2 #= Y1 - 1.
+	nonvar(Y1),
+    Y1 > 1,
+    Y2  is  Y1 - 1.
 :-end_bg.
 :-begin_in_pos.
 f(w(32,27),w(32,70)).

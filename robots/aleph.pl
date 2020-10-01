@@ -10,6 +10,7 @@
 :- aleph_set(nodes,50000).
 
 :- modeh(*,f(+state,-state)).
+:- modeb(*,f(+state,-state)).
 :- modeb(*,move_up(+state,-state)).
 :- modeb(*,move_down(+state,-state)).
 :- modeb(*,move_left(+state,-state)).
@@ -27,3 +28,4 @@
 :- determination(f/2,at_bottom/1).
 :- determination(f/2,at_left/1).
 :- determination(f/2,at_right/1).
+:- determination(f/2,f/2).

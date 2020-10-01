@@ -1,5 +1,4 @@
-f(A,B):-move_up(A,C),move_up(C,D),move_up(D,E),move_up(E,B).
-f(F,G):-move_up(F,H),move_up(H,G).
-f(I,J):-move_up(I,K),move_up(K,L),move_up(L,J).
-f(M,N):-move_up(M,N).
-%time,7.437066078186035
+f(A,B):-move_down(A,C),f(C,B).
+f(D,E):-move_up(D,F),move_up(F,G),f(G,E).
+f(H,I):-move_up(H,I).
+%time,7.461055278778076

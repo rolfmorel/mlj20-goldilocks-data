@@ -18,8 +18,8 @@ import common
 NUM_TRIALS = 10
 NUM_TRAIN_EXAMPLES = 20  # both this number of positive as well as negative examples
 NUM_TEST_EXAMPLES = 1000
-# TIMEOUT = 60
-TIMEOUT = 120
+TIMEOUT = 60
+# TIMEOUT = 120
 MIN_SIZE = 4
 MAX_SIZE = 30
 EVAL_TIMEOUT = 0.01
@@ -31,7 +31,7 @@ MAX_LITERALS = 20
 trials = list(range(1,NUM_TRIALS+1))
 sizes = [10,20,30,40,50,60,70,80,90,100]
 # DONE
-systems = ['metagol']
+# systems = ['metagol']
 # systems = ['aleph']
 # systems = ['ilasp2']
 # TODO
@@ -49,7 +49,7 @@ systems = ['metagol']
 # systems = ['popper-prolog','metagol','aleph','ilasp2-prolog','ilasp3-prolog']
 # systems = ['popper-prolog','metagol','aleph','ilasp2','ilasp2-prolog','ilasp3','ilasp3-prolog']
 # systems = ['popper-prolog','metagol','aleph','ilasp2','ilasp2-prolog','ilasp3']
-# systems = ['popper-prolog','unconstrained-prolog','metagol','aleph','ilasp2','ilasp3']
+systems = ['popper-prolog','unconstrained-prolog','metagol','aleph','ilasp2','ilasp3']
 
 def get_train_data_file(size, trial, ilasp=False, aleph=False, prolog=False):
     if ilasp:
@@ -208,6 +208,10 @@ def call_aleph(size, trial):
     d = f'%time,{t2-t1}'
     if prog == None:
         return [d]
+    if '<PROG>' not in prog:
+        return [d]
+    # if prog == None:
+        # return [d]
     return [x for x in prog.split('<PROG>')[1].split('</PROG>')[0].split('\n') if ':-' in x] + [d]
 
 def call_metagol(size, trial):
@@ -380,7 +384,7 @@ def gen_data():
             gen_data_(size, trial)
 
 # gen_data()
-learn()
-evaluate()
+# learn()
+# evaluate()
 text = results()
 print(text)

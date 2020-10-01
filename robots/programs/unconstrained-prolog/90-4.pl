@@ -1,3 +1,3 @@
 f(A,B) :- move_up(A,B).
 f(A,B) :- move_up(A,C),f(C,B).
-%time,42.33091974258423
+%time,31.4131600856781

@@ -1,5 +1,4 @@
 :- use_module(library(clpfd)).
-
 at_left(w(1,_)).
 
 at_bottom(w(_,1)).

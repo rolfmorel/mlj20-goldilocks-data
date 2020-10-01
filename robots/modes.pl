@@ -1,4 +1,4 @@
-max_vars(3).
+max_vars(4).
 max_body(3).
 max_clauses(3).
 

@@ -1,3 +1,3 @@
 f(A,B):-move_up(A,C),move_up(C,B).
 f(A,B):-move_up(A,C),f(C,B).
-%time,0.6931648254394531
+%time,0.740454912185669
