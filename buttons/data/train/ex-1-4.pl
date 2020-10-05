@@ -1,4 +1,4 @@
-% chosen [12]
+% chosen [2]
 pos(f(p1)).
 pos(f(p2)).
 pos(f(p3)).

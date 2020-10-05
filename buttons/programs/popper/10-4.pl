@@ -1,2 +1,2 @@
-f(A) :- button4(A),button13(A),button12(A),button18(A),button16(A),button2(A),button8(A),button7(A),button17(A).
-%time,37.88998222351074
+f(A) :- button2(A),button3(A),button5(A),button7(A),button20(A),button14(A),button19(A),button10(A),button4(A),button6(A).
+%time,26.100831985473633

@@ -24,29 +24,11 @@ NUM_EXAMPLES = 200
 NUM_BUTTONS = 200
 
 trials = list(range(1,NUM_TRIALS+1))
-# trials = [6]
-# trials = [1,2,3,4,5]
-# tails = [6,7,8,9,10]
-# tails = [1,2,3,4,5,6,7,8,9,10]
 sizes = list(range(1,MAX_SIZE+1))
-# sizes = [4]
-# TODO
-# sizes = [1,2]
-# sizes = [1,2,3,4,5,6,7,8,9,10]
-# sizes = [1,2,3,4,5]
-# sizes = [6,7,8,9,10]
 # systems = ['popper']
-# systems = ['metagol']
-# systems = ['aleph']
-# systems = ['ilasp2']
-# systems = ['ilasp3']
-# systems = ['ilasp2']
-# systems = ['unconstrained']
-# systems = ['unconstrained','aleph','ilasp3']
+# systems = ['unconstrained','aleph', 'ilasp2','ilasp3','metagol']
 systems = ['popper','unconstrained','aleph', 'ilasp2','ilasp3','metagol']
-# systems = ['popper']
-# systems = ['aleph','metagol']
-# systems = ['ilasp2','ilasp3']
+
 
 def get_train_ex_file(size, trial, ilasp=False, aleph=False):
     if ilasp:
@@ -129,10 +111,10 @@ def gen_data_(size, trial):
     # SEPARATE THE NOT CHOSEN
     not_chosen = [i for i in buttons if i not in chosen]
 
-    def gen_pos():
+    def gen_pos(chosen):
         for x in chosen:
             yield x
-        # SAMPLE K NOT CHOSEN ONES
+        # SAMPLE NOT CHOSEN ONES
         k = NUM_BUTTONS - size
         k = np.random.randint(0, k+1)
         for x in np.random.choice(not_chosen, k, replace=False):
@@ -160,7 +142,10 @@ def gen_data_(size, trial):
 
     # GEN BK
     for _ in range(len(examples)):
-        bk_pos.append(list(gen_pos()))
+        bk_pos.append(list(gen_pos(chosen)))
+    for i in range(size):
+        bk_neg.append(list(gen_pos(chosen[0:i] + chosen[i+1:])))
+    for _ in range(len(examples) - size):
         bk_neg.append(list(gen_neg()))
 
     # WRITE BK FOR POPPER, METAGOL, AND ALEPH

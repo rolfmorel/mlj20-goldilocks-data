@@ -1,2 +1,2 @@
-f :- button4, button12, button13, button20.
-%time,35.98149800300598
+f :- button5, button7, button17, button20.
+%time,26.939477920532227

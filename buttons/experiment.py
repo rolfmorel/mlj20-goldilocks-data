@@ -24,19 +24,7 @@ NUM_EXAMPLES = 200
 NUM_BUTTONS = 20
 
 trials = list(range(1,NUM_TRIALS+1))
-# trials = [1,2]
-tails = [1,2,3,4,5,6,7,8,9,10]
 sizes = list(range(1,MAX_SIZE+1))
-# TODO
-# sizes = [1,2]
-# sizes = [1,2,3,4,5,6,7,8,9,10]
-# sizes = [1,2,3,4,5]
-# sizes = [6,7,8,9,10]
-# sizes = range(1,11)
-# systems = ['popper']
-# systems = ['metagol']
-# systems = ['ilasp2']
-# systems = ['unconstrained','aleph','ilasp3']
 systems = ['popper','unconstrained','aleph', 'ilasp2','ilasp3','metagol']
 
 def get_train_ex_file(size, trial, ilasp=False, aleph=False):
