@@ -120,10 +120,10 @@ def gen_data_(size, trial):
     # SEPARATE THE NOT CHOSEN
     not_chosen = [i for i in buttons if i not in chosen]
 
-    def gen_pos():
+    def gen_pos(chosen):
         for x in chosen:
             yield x
-        # SAMPLE K NOT CHOSEN ONES
+        # SAMPLE NOT CHOSEN ONES
         k = NUM_BUTTONS - size
         k = np.random.randint(0, k+1)
         for x in np.random.choice(not_chosen, k, replace=False):
@@ -151,7 +151,10 @@ def gen_data_(size, trial):
 
     # GEN BK
     for _ in range(len(examples)):
-        bk_pos.append(list(gen_pos()))
+        bk_pos.append(list(gen_pos(chosen)))
+    for i in range(size):
+        bk_neg.append(list(gen_pos(chosen[0:i] + chosen[i+1:])))
+    for _ in range(len(examples) - size):
         bk_neg.append(list(gen_neg()))
 
     # WRITE BK FOR POPPER, METAGOL, AND ALEPH
