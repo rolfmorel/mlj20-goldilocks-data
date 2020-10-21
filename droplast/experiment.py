@@ -5,6 +5,7 @@ sys.path.append('../')
 import common
 
 systems = ['popper', 'unconstrained','metagol','aleph']
+systems = ['popper']
 name = 'droplast'
 
 def droplast(xs):
@@ -20,6 +21,6 @@ def gen_neg():
     return f'f({x},{x})'
 
 # common.gen_data(gen_pos, gen_neg)
-# common.learn(name, systems)
-# common.evaluate(name, systems)
+#common.learn(name, systems)
+#common.evaluate(name, systems)
 common.results(name, systems)

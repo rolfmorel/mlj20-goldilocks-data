@@ -1,3 +1,3 @@
-f(A,B) :- move_up(A,B).
-f(A,B) :- move_up(A,C),f(C,B),at_top(B).
-%time,12.676529884338379
+f(A,B) :- move_up(A,B),at_top(B).
+f(A,B) :- move_up(A,C),f(C,B).
+%time,17.32976722717285

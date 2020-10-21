@@ -25,9 +25,9 @@ NUM_BUTTONS = 200
 
 trials = list(range(1,NUM_TRIALS+1))
 sizes = list(range(1,MAX_SIZE+1))
-# systems = ['popper']
+systems = ['popper']
 # systems = ['unconstrained','aleph', 'ilasp2','ilasp3','metagol']
-systems = ['popper','unconstrained','aleph', 'ilasp2','ilasp3','metagol']
+# systems = ['popper','unconstrained','aleph', 'ilasp2','ilasp3','metagol']
 
 
 def get_train_ex_file(size, trial, ilasp=False, aleph=False):
@@ -359,5 +359,5 @@ def results():
 
 # gen_data()
 # gen_bias()
-# learn()
+learn()
 results()

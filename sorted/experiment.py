@@ -6,7 +6,7 @@ sys.path.append('../')
 import common
 
 systems = ['popper', 'unconstrained','metagol', 'aleph']
-# systems = ['metagol']
+systems = ['popper']
 name = 'sorted'
 
 def gen_pos():
@@ -22,6 +22,6 @@ def gen_neg():
             return f'f({z})'
 
 # common.gen_data(gen_pos, gen_neg)
-# common.learn(name, systems)
+common.learn(name, systems)
 common.evaluate(name, systems)
 common.results(name, systems)

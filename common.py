@@ -11,7 +11,8 @@ import scipy.stats as stats
 from tempfile import NamedTemporaryFile
 
 # NUM_CPUS = 1
-NUM_CPUS = 14
+# NUM_CPUS = 14
+NUM_CPUS = 6
 TIMEOUT = 300
 EVAL_TIMEOUT = 0.01
 # NUM_TRIALS = 10
