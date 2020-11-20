@@ -1,6 +1,0 @@
-{
-  "size": 3,
-  "trial": 2,
-  "time": 0.22881865501403809,
-  "program": "% learning f/2\n% clauses: 1\n% clauses: 2\nf(A,B):-move_right(A,C),f_1(C,B).\nf_1(A,B):-move_right(A,C),move_right(C,B).\n"
-}

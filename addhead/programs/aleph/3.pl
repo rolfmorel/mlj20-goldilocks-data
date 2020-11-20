@@ -1,4 +1,4 @@
 
 f(A,B):-head(A,C),cons(C,A,D),cons(C,D,E),cons(C,E,B).
 
-%TIME: 0.7976720333099365
+%TIME: 42.090986013412476

@@ -5,8 +5,8 @@ import random
 sys.path.append('../')
 import common
 
-systems = ['popper', 'unconstrained','metagol','aleph']
-name = 'dropk'
+# systems = ['popper', 'unconstrained','metagol','aleph']
+# name = 'dropk'
 
 def gen_pos():
     x = common.gen_list(min_len=2)
@@ -24,4 +24,4 @@ def gen_neg():
 # common.gen_data(gen_pos, gen_neg)
 # common.learn(name, systems)
 # common.evaluate(name, systems)
-common.results(name, systems)
+# common.results(name, systems)

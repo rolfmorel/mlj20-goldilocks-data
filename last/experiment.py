@@ -5,10 +5,6 @@ import numpy as np
 sys.path.append('../')
 import common
 
-systems = ['popper', 'unconstrained','metagol','aleph']
-# systems = ['metagol']
-name = 'last'
-
 def gen_pos():
     x = common.gen_list(min_len=1)
     y = x[-1]
@@ -23,8 +19,3 @@ def gen_neg():
     else:
         y = np.random.choice(vs,1)[0]
     return f'f({arr},{y})'
-
-# common.gen_data(gen_pos, gen_neg)
-# common.learn(name, systems)
-common.evaluate(name, systems)
-common.results(name, systems)

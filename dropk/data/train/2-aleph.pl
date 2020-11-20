@@ -16,14 +16,14 @@
 :- modeb(*,empty(+list)).
 :- modeb(*,even(+element)).
 :- modeb(*,odd(+element)).
-:- modeb(*,one(+int)).
-:- modeb(*,zero(-int)).
-:- modeb(*,decrement(+int,-int)).
-%% :- modeb(*,increment(+int,-int)). % PROBLEM SPECIFIC
+:- modeb(*,one(+element)).
+:- modeb(*,zero(-element)).
+:- modeb(*,decrement(+element,-element)).
+%% :- modeb(*,increment(+element,-element)). % PROBLEM SPECIFIC
 %% :- modeb(*,element(+list,-element)). % PROBLEM SPECIFIC
 %% :- modeb(*,cons(+element,+list,-list)). % PROBLEM SPECIFIC
-:- modeh(*,f(+list,+int,-list)).
-:- modeb(*,f(+list,+int,-list)).
+:- modeh(*,f(+list,+element,-list)).
+:- modeb(*,f(+list,+element,-list)).
 
 :- determination(f/3,head/2).
 :- determination(f/3,tail/2).

@@ -1,6 +1,0 @@
-{
-  "size": 1,
-  "trial": 2,
-  "time": 0.14185190200805664,
-  "program": "% learning f/1\n% clauses: 1\n% clauses: 2\n% clauses: 3\n% clauses: 4\n% clauses: 5\n% clauses: 6\n% clauses: 7\n% clauses: 8\n% clauses: 9\n% clauses: 10\n% unable to learn a solution\n"
-}

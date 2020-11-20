@@ -1,5 +1,5 @@
-:- modeh(*,f(+list,-int)).
-:- modeb(*,f(+list,-int)).
+:- modeh(*,f(+list,-element)).
+:- modeb(*,f(+list,-element)).
 %% :- modeb(*,cons(+element,+list,-list)).
 
 :- determination(f/2,head/2).

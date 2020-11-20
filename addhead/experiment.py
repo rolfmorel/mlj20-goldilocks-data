@@ -4,9 +4,6 @@ import random
 sys.path.append('../')
 import common
 
-systems = ['popper', 'unconstrained', 'metagol', 'aleph']
-name = 'addhead'
-
 def add_last(xs):
     return [xs[0],xs[0],xs[0]] + xs
 
@@ -21,6 +18,3 @@ def gen_neg():
     return f'f({x},{y})'
 
 # common.gen_data(gen_pos, gen_neg)
-# common.learn(name, systems)
-# common.evaluate(name, systems)
-common.results(name, systems)

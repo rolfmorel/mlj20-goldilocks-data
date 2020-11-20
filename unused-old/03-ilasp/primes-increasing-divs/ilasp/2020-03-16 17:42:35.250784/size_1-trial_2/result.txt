@@ -1,6 +1,0 @@
-{
-  "size": 1,
-  "trial": 2,
-  "time": 0.08948493003845215,
-  "program": "f(V0) :- div2(V0).\n\nPre-processing  : 0.002s\nSolve time      : 0.07s\nTotal           : 0.072s\n"
-}

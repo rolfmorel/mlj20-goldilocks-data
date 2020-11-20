@@ -1,6 +1,6 @@
 modeh(f,3).
 type(f,0,list).
-type(f,1,int).
+type(f,1,element).
 type(f,2,list).
 direction(f,0,in).
 direction(f,1,in).

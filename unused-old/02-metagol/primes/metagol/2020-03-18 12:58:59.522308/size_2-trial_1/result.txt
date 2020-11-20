@@ -1,6 +1,0 @@
-{
-  "size": 2,
-  "trial": 1,
-  "time": 0.1367480754852295,
-  "program": "% learning f/1\n% clauses: 1\nf(A):-div2(A),div3(A).\n"
-}

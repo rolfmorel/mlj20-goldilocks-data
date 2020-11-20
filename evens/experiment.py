@@ -32,5 +32,5 @@ def gen_neg():
 
 # common.gen_data(gen_pos, gen_neg)
 # common.learn(name, systems)
-common.evaluate(name, systems)
-common.results(name, systems)
+# common.evaluate(name, systems)
+# common.results(name, systems)

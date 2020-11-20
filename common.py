@@ -11,13 +11,13 @@ import scipy.stats as stats
 from tempfile import NamedTemporaryFile
 
 # NUM_CPUS = 1
-# NUM_CPUS = 14
-NUM_CPUS = 6
+NUM_CPUS = 14
+# NUM_CPUS = 6
 TIMEOUT = 300
 EVAL_TIMEOUT = 0.01
 # NUM_TRIALS = 10
 NUM_TRIALS = 5
-BK_FILE = '../bk.pl'
+BK_FILE = 'bk.pl'
 GROUND_CONSTRAINTS = False
 MAX_LITERALS = 20
 NUM_TRAIN_EXAMPLES = 10
@@ -30,23 +30,23 @@ trials = list(range(1,NUM_TRIALS+1))
 
 metagol_skips = ['addhead','dropk','droplast']
 
-def get_popper_modes():
-    return f'{os.getcwd()}/data/all_modes.pl'
+def get_popper_modes(name):
+    return f'{os.getcwd()}/{name}/data/all_modes.pl'
 
-def get_train_data_file(trial, aleph=False):
-    x = f'data/train/{trial}.pl'
+def get_train_data_file(name, trial, aleph=False):
+    x = f'{name}/data/train/{trial}.pl'
     if aleph:
         x = x.replace('.pl','-aleph.pl')
     return x
 
-def get_test_data_file(trial):
-    return f'data/test/{trial}.pl'
+def get_test_data_file(name, trial):
+    return f'{name}/data/test/{trial}.pl'
 
-def get_prog_file(system, trial):
-    return f'programs/{system}/{trial}.pl'
+def get_prog_file(name, system, trial):
+    return f'{name}/programs/{system}/{trial}.pl'
 
-def get_results_file(system, trial):
-    return f'results/{system}/{trial}.pl'
+def get_results_file(name, system, trial):
+    return f'{name}/results/{system}/{trial}.pl'
 
 def call_(cmd, action=None, timeout=60):
     cmd = cmd.split(' ')
@@ -89,13 +89,13 @@ def fix_times(t1, t2):
         d = TIMEOUT
     return f'%TIME: {d}'
 
-def call_popper(system, trial):
+def call_popper(name, system, trial):
     no_pruning = False
     if system == 'unconstrained':
         no_pruning = True
     (prog, context) = popper.entry_point.run_experiment(
-        get_popper_modes(),
-        BK_FILE, get_train_data_file(trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=DEBUG, stats=True)
+        get_popper_modes(name),
+        BK_FILE, get_train_data_file(name, trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=DEBUG, stats=True)
     context = context.as_dict()
     stats = ''
     stats += f"%NUMPROGS: {context['num_programs_generated']}\n"
@@ -106,9 +106,9 @@ def call_popper(system, trial):
         return [stats]
     return prog + [stats]
 
-def call_metagol(trial):
+def call_metagol(name, trial):
     # print(os.getcwd())
-    load_files = ['experiment', get_train_data_file(trial)]
+    load_files = ['experiment', get_train_data_file(name, trial)]
     t1 = time.time()
     prog = call_prolog(load_files, 'run', TIMEOUT)
     t2 = time.time()
@@ -117,8 +117,8 @@ def call_metagol(trial):
         return [d]
     return [x for x in prog.split('\n') if ':-' in x] + [d]
 
-def call_aleph(trial):
-    load_files = [get_train_data_file(trial, aleph=True)]
+def call_aleph(name, trial):
+    load_files = [get_train_data_file(name, trial, aleph=True)]
     cmd = "induce(P),writeln('<PROG>'),numbervars(P,0,_),foreach(member(C,P),(write(C),write('.\n'))),writeln('</PROG>'),halt"
     t1 = time.time()
     prog = call_prolog(load_files, cmd, TIMEOUT)
@@ -135,31 +135,31 @@ def save_prog(prog, filename):
         f.write('\n'.join(prog) + '\n')
 
 def learn_(args):
-    (system, trial) = args
+    (name, system, trial) = args
     prog = None
     if system == 'metagol':
-        prog = call_metagol(trial)
+        prog = call_metagol(name, trial)
     elif system == 'aleph':
-        prog = call_aleph(trial)
+        prog = call_aleph(name, trial)
     else:
-        prog = call_popper(system, trial)
-    save_prog(prog, get_prog_file(system, trial))
+        prog = call_popper(name, system, trial)
+    save_prog(prog, get_prog_file(name, system, trial))
 
 def learn(name, systems):
     if name in metagol_skips:
         systems = [x for x in systems if x != 'metagol']
-    jobs = [(system, trial) for trial in trials for system in systems]
+    jobs = [(name, system, trial) for trial in trials for system in systems]
     list(parmap(learn_, jobs))
 
 def test_(args):
-    (system, trial) = args
-    with open(get_results_file(system, trial), 'w') as f:
-        res = call_prolog([BK_FILE, get_test_data_file(trial), get_prog_file(system, trial)], 'test')
+    (name, system, trial) = args
+    with open(get_results_file(name, system, trial), 'w') as f:
+        res = call_prolog([BK_FILE, get_test_data_file(name, trial), get_prog_file(name, system, trial)], 'test')
         if res != None:
             f.write(res)
 
-def get_accs_(system, trial):
-    with open(get_results_file(system, trial), 'r') as f:
+def get_accs_(name, system, trial):
+    with open(get_results_file(name, system, trial), 'r') as f:
         return [int(line.split(',')[1]) for line in f if line.startswith('acc')]
 
 
@@ -172,7 +172,7 @@ def gen_data_(gen_pos, gen_neg, trial):
     # train data
     train_pos = [gen_pos() for i in range(NUM_TRAIN_EXAMPLES)]
     train_neg = [gen_neg() for i in range(NUM_TRAIN_EXAMPLES)]
-    with open(get_train_data_file(trial), 'w') as f:
+    with open(get_train_data_file(name, trial), 'w') as f:
         for x in train_pos:
             f.write(f'pos({x}).\n')
         for x in train_neg:
@@ -186,9 +186,9 @@ def gen_data_(gen_pos, gen_neg, trial):
             f.write(f'neg({gen_neg()}).\n')
 
     # WRITE ALEPH INPUT
-    with open(get_train_data_file(trial,aleph=True), 'w') as f:
+    with open(get_train_data_file(name, trial, aleph=True), 'w') as f:
         # read general aleph settings
-        with open('../aleph-modes.pl') as tmp:
+        with open('aleph-modes.pl') as tmp:
             f.write(tmp.read() + '\n')
         with open('aleph.pl') as tmp:
             f.write(tmp.read() + '\n')
@@ -212,7 +212,7 @@ def gen_popper_modes():
             for line in tmp:
                 f.write(line)
         f.write('\n% ALL MODES\n')
-        with open('../modes.pl') as tmp:
+        with open('modes.pl') as tmp:
             for line in tmp:
                 f.write(line)
 
@@ -229,44 +229,44 @@ def myround(x):
         return x
     return int(x)
 
-def read_prog_file(system,trial):
-    prog_file = get_prog_file(system, trial)
+def read_prog_file(name, system, trial):
+    prog_file = get_prog_file(name, system, trial)
     with open(prog_file, 'r') as f:
         for line in f:
             yield line
 
-def get_num_progs_(system, trial):
-    for line in read_prog_file(system, trial):
+def get_num_progs_(name, system, trial):
+    for line in read_prog_file(name, system, trial):
         if line.startswith('%NUMPROGS'):
             return float(line.split(':')[1])
 
-def get_solving_(system, trial):
-    for line in read_prog_file(system, trial):
+def get_solving_(name, system, trial):
+    for line in read_prog_file(name, system, trial):
         if line.startswith('%SOLVING'):
             return float(line.split(':')[1])
 
-def get_grounding_(system, trial):
-    for line in read_prog_file(system, trial):
+def get_grounding_(name, system, trial):
+    for line in read_prog_file(name, system, trial):
         if line.startswith('%GROUNDING'):
             return float(line.split(':')[1])
 
-def get_times_(system, trial):
-    prog_file = get_prog_file(system, trial)
+def get_times_(name, system, trial):
+    prog_file = get_prog_file(name, system, trial)
     if not os.path.exists(prog_file):
         return TIMEOUT
-    for line in read_prog_file(system, trial):
+    for line in read_prog_file(name, system, trial):
         if line.startswith('%TIME'):
             return float(line.split(':')[1])
     return TIMEOUT
 
-def get_accs(system):
+def get_accs(name, system):
     accs = []
     for trial in trials:
-        accs.append(np.mean(get_accs_(system,trial)))
+        accs.append(np.mean(get_accs_(name, system, trial)))
     return int(np.mean(accs)*100), int(stats.sem(accs)*100)
 
-def get_mu_sem(system, func):
-    xs = [func(system, trial) for trial in trials]
+def get_mu_sem(name, system, func):
+    xs = [func(name, system, trial) for trial in trials]
     # print(xs)
     return myround(np.mean(xs)), myround(stats.sem(xs))
     # return np.mean(xs), stats.sem(xs)
@@ -274,21 +274,18 @@ def get_mu_sem(system, func):
 def evaluate(name, systems):
     if name in metagol_skips:
         systems = [x for x in systems if x != 'metagol']
-    jobs = [(system, trial) for trial in trials for system in systems]
+    jobs = [(name, system, trial) for trial in trials for system in systems]
     list(parmap(test_, jobs))
 
-def results(name, systems):
-    x = '\\tw{' + name + '}'
-    print('ACCS: ')
-
-    pairs = [get_accs(system) for system in systems if not (system == 'metagol' and name in metagol_skips)]
+def print_acc(name, systems):
+    pairs = [get_accs(name, system) for system in systems if not (system == 'metagol' and name in metagol_skips)]
     best = max(acc for acc,err in pairs)
-
+    x = '\\tw{' + name + '}'
     for system in systems:
         if system == 'metagol' and name in metagol_skips:
             x += f' & n/a'
         else:
-            acc,err = get_accs(system)
+            acc,err = get_accs(name, system)
             if acc >= best:
                 x += ' & \\textbf{' + str(acc) + '} $\pm$ ' + str(err)
             else:
@@ -296,7 +293,42 @@ def results(name, systems):
     x+= ' \\\\'
     print(x)
 
-    pairs = [get_mu_sem(system, get_times_) for system in systems if not (system == 'metagol' and name in metagol_skips)]
+def print_times(name, systems):
+    x = '\\tw{' + name + '}'
+    pairs = [get_mu_sem(name, system, get_times_) for system in systems if not (system == 'metagol' and name in metagol_skips)]
+    best = min(time for time,err in pairs)
+    for system in systems:
+        if system == 'metagol' and name in metagol_skips:
+            x += f' & n/a'
+        else:
+            time,err = get_mu_sem(name, system, get_times_)
+            if time <= best:
+                x += ' & \\textbf{' + str(time) + '} $\pm$ ' + str(err)
+            else:
+                x += f' & {time} $\pm$ {err}'
+    x+= ' \\\\'
+    print(x)
+
+def results(name, systems):
+    x = '\\tw{' + name + '}'
+    print('ACCS: ')
+
+    pairs = [get_accs(name, system) for system in systems if not (system == 'metagol' and name in metagol_skips)]
+    best = max(acc for acc,err in pairs)
+
+    for system in systems:
+        if system == 'metagol' and name in metagol_skips:
+            x += f' & n/a'
+        else:
+            acc,err = get_accs(name, system)
+            if acc >= best:
+                x += ' & \\textbf{' + str(acc) + '} $\pm$ ' + str(err)
+            else:
+                x += f' & {acc} $\pm$ {err}'
+    x+= ' \\\\'
+    print(x)
+
+    pairs = [get_mu_sem(name, system, get_times_) for system in systems if not (system == 'metagol' and name in metagol_skips)]
     best = min(time for time,err in pairs)
 
     print('TIMES: ')
@@ -305,7 +337,7 @@ def results(name, systems):
         if system == 'metagol' and name in metagol_skips:
             x += f' & n/a'
         else:
-            time,err = get_mu_sem(system, get_times_)
+            time,err = get_mu_sem(name, system, get_times_)
             if time <= best:
                 x += ' & \\textbf{' + str(time) + '} $\pm$ ' + str(err)
             else:
@@ -320,13 +352,13 @@ def results(name, systems):
     system = 'popper'
     x = '\\tw{' + name + '}'
 
-    time,err = get_mu_sem(system, get_times_)
+    time,err = get_mu_sem(name, system, get_times_)
     x += f' & {time} $\pm$ {err}'
 
-    time,err = get_mu_sem(system, get_grounding_)
+    time,err = get_mu_sem(name, system, get_grounding_)
     x += f' & {time} $\pm$ {err}'
 
-    time,err = get_mu_sem(system, get_solving_)
+    time,err = get_mu_sem(name, system, get_solving_)
     x += f' & {time} $\pm$ {err}'
     x+= ' \\\\'
     # print('ANDY!')
