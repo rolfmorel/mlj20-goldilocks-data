@@ -40,13 +40,13 @@ type(element,1,element).
 direction(element,0,in).
 direction(element,1,out).
 
-type(increment,0,int).
-type(increment,1,int).
+type(increment,0,element).
+type(increment,1,element).
 direction(increment,0,in).
 direction(increment,1,out).
 
-type(decrement,0,int).
-type(decrement,1,int).
+type(decrement,0,element).
+type(decrement,1,element).
 direction(decrement,0,in).
 direction(decrement,1,out).
 
@@ -61,8 +61,8 @@ direction(even,0,in).
 type(odd,0,element).
 direction(odd,0,in).
 
-type(one,0,int).
+type(one,0,element).
 direction(one,0,in).
 
-type(zero,0,int).
+type(zero,0,element).
 direction(zero,0,out).
