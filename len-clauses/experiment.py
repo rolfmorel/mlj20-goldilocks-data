@@ -30,7 +30,8 @@ trials = list(range(1,NUM_TRIALS+1))
 # trials = list(range(3,NUM_TRIALS+1))
 trials = [1,2,3,4,5]
 systems = ['popper']
-sizes = [10,20,30,40,50,60]
+# sizes = [10,20,30,40,50,60]
+sizes = [70,80,90,100]
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
 def get_train_data_file(trial):
@@ -171,6 +172,14 @@ def results():
     # print(x)
 
 # gen_data()
-learn()
+# learn()
 # evaluate()
-results()
+# results()
+
+import multiprocessing as mp
+if __name__ == '__main__':
+    mp.set_start_method('fork')
+    # gen_data()
+    learn()
+    evaluate()
+    results()

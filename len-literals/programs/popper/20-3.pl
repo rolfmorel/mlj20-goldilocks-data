@@ -1,3 +1,3 @@
-f(A,B) :- empty(A),zero(B).
+f(A,B) :- zero(B),empty(A).
 f(A,B) :- tail(A,C),f(C,D),increment(D,B).
-%time,1.6551661491394043
+%time,1.1855840682983398

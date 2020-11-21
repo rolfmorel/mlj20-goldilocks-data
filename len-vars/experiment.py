@@ -29,7 +29,7 @@ trials = list(range(1,NUM_TRIALS+1))
 # trials = [1]
 systems = ['popper']
 sizes = list(range(4,14))
-# sizes = [12]
+sizes = [14,15]
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
 def get_train_data_file(trial):
@@ -112,6 +112,16 @@ def learn_(args):
 def learn():
     list(common.parmap(learn_, jobs, NUM_CPUS))
 
+def test_(args):
+    (system, size, trial) = args
+    with open(get_results_file(system, size, trial), 'w') as f:
+        res = common.call_prolog([BK_FILE, get_test_data_file(trial), get_prog_file(system, size, trial)], 'test')
+        if res != None:
+            f.write(res)
+
+def evaluate():
+    list(common.parmap(test_, jobs, NUM_CPUS))
+
 def get_times_(system, size, trial):
     prog_file = get_prog_file(system, size, trial)
     if not os.path.exists(prog_file):
@@ -136,6 +146,10 @@ def results():
             time,err = get_times(system, size)
             print(size, time, err)
 
-# gen_data()
-# learn()
-results()
+import multiprocessing as mp
+if __name__ == '__main__':
+    mp.set_start_method('fork')
+    # gen_data()
+    learn()
+    evaluate()
+    results()

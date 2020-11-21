@@ -9,6 +9,7 @@ import popper.entry_point
 import multiprocessing
 import numpy as np
 import scipy.stats as stats
+import multiprocessing as mp
 sys.path.append('../')
 import common
 
@@ -26,13 +27,10 @@ NUM_TEST_EXAMPLES = 1000
 MAX_ELEMENT = 1000
 
 trials = list(range(1,NUM_TRIALS+1))
-# trials = [6,7,8,9,10]
+# trials = [1,2]
 # systems = ['popper', 'metagol', 'unconstrained']
-systems = ['popper','metagol']
-# systems = ['popper']
-# sizes = [10,20,30,40,50]
-# sizes = [10000]
-# sizes = []
+# systems = ['popper','metagol']
+systems = ['popper']
 sizes = [50,100,150,200,250,300,350,400,450,500]
 jobs = [(system, size, trial) for system in systems for size in sizes for trial in trials]
 
@@ -188,9 +186,10 @@ def results():
 
 
 
-# gen_data()
-# learn()
-evaluate()
-results()
 
-# learn_(('popper',1))
+if __name__ == '__main__':
+    mp.set_start_method('fork')
+    # gen_data()
+    learn()
+    evaluate()
+    results()

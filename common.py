@@ -10,9 +10,8 @@ import numpy as np
 import scipy.stats as stats
 from tempfile import NamedTemporaryFile
 
-# NUM_CPUS = 1
-NUM_CPUS = 14
-# NUM_CPUS = 6
+
+NUM_CPUS = 10
 TIMEOUT = 300
 EVAL_TIMEOUT = 0.01
 # NUM_TRIALS = 10
@@ -98,10 +97,12 @@ def call_popper(name, system, trial):
         BK_FILE, get_train_data_file(name, trial), MAX_LITERALS, EVAL_TIMEOUT, GROUND_CONSTRAINTS, no_pruning, TIMEOUT, debug=DEBUG, stats=True)
     context = context.as_dict()
     stats = ''
+    # print(context.keys())
+    # print(context['constrain']['impose'].keys())
     stats += f"%NUMPROGS: {context['num_programs_generated']}\n"
     stats += f"%TIME: {context['_total']}\n"
-    stats += f"%SOLVING: {context['generate']['solver']['solving']['_total']}\n"
-    stats += f"%GROUNDING: {context['generate']['solver']['grounding']['_total']}\n"
+    stats += f"%SOLVING: {context['generate']['solver']['get_model']['_total']}\n"
+    stats += f"%GROUNDING: {context['constrain']['impose']['grounding']['_total']}\n"
     if prog == None or prog == False:
         return [stats]
     return prog + [stats]
@@ -307,6 +308,27 @@ def print_times(name, systems):
             else:
                 x += f' & {time} $\pm$ {err}'
     x+= ' \\\\'
+    print(x)
+
+
+def print_grounding(name, systems):
+    if 'popper' not in systems:
+        return
+
+    # print('TIME/GROUNDING/SOLVING: ')
+    system = 'popper'
+    x = '\\tw{' + name + '}'
+
+    time,err = get_mu_sem(name, system, get_times_)
+    x += f' & {time} $\pm$ {err}'
+
+    time,err = get_mu_sem(name, system, get_grounding_)
+    x += f' & {time} $\pm$ {err}'
+
+    time,err = get_mu_sem(name, system, get_solving_)
+    x += f' & {time} $\pm$ {err}'
+    x+= ' \\\\'
+    # print('ANDY!')
     print(x)
 
 def results(name, systems):

@@ -9,12 +9,13 @@ def run(name, systems):
     # common.evaluate(name, systems)
     # common.results(name, systems)
     # common.print_acc(name, systems)
-    common.print_times(name, systems)
+    # common.print_times(name, systems)
+    common.print_grounding(name, systems)
 
 if __name__ == '__main__':
     mp.set_start_method('fork')
-    # systems = ['popper', 'unconstrained', 'aleph']
-    systems = ['popper']
+    systems = ['popper', 'unconstrained', 'metagol', 'aleph']
+    # systems = ['popper']
     # systems = ['unconstrained']
     # systems = ['aleph']
 

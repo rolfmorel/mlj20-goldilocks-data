@@ -154,7 +154,10 @@ def results():
             print(size, time, err)
 
 
-# gen_data()
-learn()
-# evaluate()
-results()
+import multiprocessing as mp
+if __name__ == '__main__':
+    mp.set_start_method('fork')
+    # gen_data()
+    learn()
+    evaluate()
+    results()
